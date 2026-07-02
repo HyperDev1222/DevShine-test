@@ -1,0 +1,74 @@
+.knr-before-after[data-section-id] {
+  --knr-ba-max-width: 1200px;
+  font-family: 'Inter', sans-serif;
+  padding: 4rem 1.5rem;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__inner {
+  max-width: var(--knr-ba-max-width);
+  margin: 0 auto;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__heading {
+  font-size: 1.75rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 0.75rem;
+  color: #1a1a1a;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__subheading {
+  text-align: center;
+  color: #666;
+  margin: 0 0 2.5rem;
+  font-size: 1rem;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__figure {
+  margin: 0;
+  position: relative;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__figure img,
+.knr-before-after[data-section-id] .knr-before-after__figure svg {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__label {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.knr-before-after[data-section-id] .knr-before-after__caption {
+  text-align: center;
+  color: #666;
+  font-size: 0.875rem;
+  margin: 1rem 0 0;
+}
+
+@media screen and (max-width: 600px) {
+  .knr-before-after[data-section-id] .knr-before-after__images {
+    grid-template-columns: 1fr;
+  }
+}

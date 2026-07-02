@@ -1,0 +1,72 @@
+{{ 'knr-breadcrumb.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign breadcrumb_collection = collection
+  if breadcrumb_collection == blank and section.settings.fallback_collection != blank
+    assign breadcrumb_collection = section.settings.fallback_collection
+  endif
+  if breadcrumb_collection == blank and product.collections.size > 0
+    assign breadcrumb_collection = product.collections.first
+  endif
+-%}
+
+<nav
+  class="knr-breadcrumb"
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+>
+  <ol class="knr-breadcrumb__list">
+    <li class="knr-breadcrumb__item">
+      <a href="{{ routes.root_url }}" class="knr-breadcrumb__link">{{ section.settings.home_label | escape }}</a>
+    </li>
+    {%- if breadcrumb_collection != blank -%}
+      <li class="knr-breadcrumb__item">
+        <span class="knr-breadcrumb__separator" aria-hidden="true">{{ section.settings.separator | escape }}</span>
+        <a href="{{ breadcrumb_collection.url }}" class="knr-breadcrumb__link">{{ breadcrumb_collection.title | escape }}</a>
+      </li>
+    {%- endif -%}
+    <li class="knr-breadcrumb__item">
+      <span class="knr-breadcrumb__separator" aria-hidden="true">{{ section.settings.separator | escape }}</span>
+      <span class="knr-breadcrumb__current" aria-current="page">{{ product.title | escape }}</span>
+    </li>
+  </ol>
+</nav>
+
+{% schema %}
+{
+  "name": "KNR Breadcrumb",
+  "tag": "section",
+  "class": "knr-section-breadcrumb",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Accessibility label",
+      "default": "Breadcrumb"
+    },
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Home label",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": "/"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback collection",
+      "info": "Used when product is not viewed from a collection context"
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Breadcrumb"
+    }
+  ]
+}
+{% endschema %}
