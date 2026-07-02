@@ -1,0 +1,191 @@
+.knr-product-main[data-section-id] {
+  --knr-product-max-width: 1280px;
+  font-family: 'Inter', sans-serif;
+  padding: 0 40px 4rem;
+  background-color: #f4f1ee;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__inner {
+  max-width: var(--knr-product-max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__main-image-wrap {
+  aspect-ratio: 1;
+  background: #f5f5f5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__main-image,
+.knr-product-main[data-section-id] .knr-product-main__placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__thumbnails {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__thumbnail {
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #f5f5f5;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__thumbnail--active {
+  border-color: #1a1a1a;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__vendor {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin: 0 0 0.5rem;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__title {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  color: #1a1a1a;
+}
+
+.knr-product-main[data-section-id] .knr-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.knr-product-main[data-section-id] .knr-price__compare-value {
+  font-size: 1rem;
+  color: #999;
+}
+
+.knr-product-main[data-section-id] .knr-price__current {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.knr-product-main[data-section-id] .knr-price__compare--hidden {
+  display: none;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__option {
+  border: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__option-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #1a1a1a;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__option-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__option-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__option-value--selected {
+  border-color: #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__option-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__submit {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-bottom: 1.5rem;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__submit:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.knr-product-main[data-section-id] .knr-product-main__description {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #444;
+}
+
+@media screen and (min-width: 900px) {
+  .knr-product-main[data-section-id] .knr-product-main__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .knr-product-main[data-section-id] {
+    padding: 0 20px 3rem;
+  }
+}

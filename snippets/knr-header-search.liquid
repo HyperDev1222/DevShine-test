@@ -1,0 +1,56 @@
+{% comment %}
+  KNR scoped search modal. Requires knr-header.js.
+
+  Accepts:
+  - section_id: {String} Section id for unique input id
+  - search_label: {String} Accessibility label for search button
+{% endcomment %}
+
+<div class="knr-header__search-wrap" data-knr-search-wrap>
+  <button
+    type="button"
+    class="knr-header__icon-btn"
+    aria-label="{{ search_label | escape }}"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    data-knr-search-open
+  >
+    <svg class="knr-header__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M14 14l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <div class="knr-header__search-modal" data-knr-search-modal hidden role="dialog" aria-modal="true" aria-label="{{ search_label | escape }}">
+    <div class="knr-header__search-overlay" data-knr-search-close tabindex="-1"></div>
+    <div class="knr-header__search-dialog">
+      <button type="button" class="knr-header__search-close" data-knr-search-close aria-label="{{ 'accessibility.close' | t }}">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="knr-header__search-form">
+        <label class="knr-header__search-label visually-hidden" for="knr-search-input-{{ section_id }}">
+          {{ 'general.search.search' | t }}
+        </label>
+        <input
+          type="search"
+          name="q"
+          id="knr-search-input-{{ section_id }}"
+          class="knr-header__search-input"
+          placeholder="{{ 'general.search.search' | t }}"
+          value="{{ search.terms | escape }}"
+          autocomplete="off"
+          data-knr-search-input
+        >
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit" class="knr-header__search-submit" aria-label="{{ 'general.search.search' | t }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M14 14l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

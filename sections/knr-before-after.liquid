@@ -1,0 +1,123 @@
+{{ 'knr-before-after.css' | asset_url | stylesheet_tag }}
+
+<section class="knr-before-after" data-section-id="{{ section.id }}">
+  <div class="knr-before-after__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="knr-before-after__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="knr-before-after__subheading">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="knr-before-after__grid">
+        {%- for block in section.blocks -%}
+          <article class="knr-before-after__pair" {{ block.shopify_attributes }}>
+            <div class="knr-before-after__images">
+              <figure class="knr-before-after__figure">
+                {%- if block.settings.before_image != blank -%}
+                  {{
+                    block.settings.before_image
+                    | image_url: width: 600
+                    | image_tag: loading: 'lazy', alt: block.settings.before_label, widths: '300, 400, 600'
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag }}
+                {%- endif -%}
+                <figcaption class="knr-before-after__label">{{ block.settings.before_label | escape }}</figcaption>
+              </figure>
+              <figure class="knr-before-after__figure">
+                {%- if block.settings.after_image != blank -%}
+                  {{
+                    block.settings.after_image
+                    | image_url: width: 600
+                    | image_tag: loading: 'lazy', alt: block.settings.after_label, widths: '300, 400, 600'
+                  }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag }}
+                {%- endif -%}
+                <figcaption class="knr-before-after__label">{{ block.settings.after_label | escape }}</figcaption>
+              </figure>
+            </div>
+            {%- if block.settings.caption != blank -%}
+              <p class="knr-before-after__caption">{{ block.settings.caption | escape }}</p>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KNR Before After",
+  "tag": "section",
+  "class": "knr-section-before-after",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Before & After"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "See the difference for yourself"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "comparison_pair",
+      "name": "Comparison pair",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "before_image",
+          "label": "Before image"
+        },
+        {
+          "type": "text",
+          "id": "before_label",
+          "label": "Before label",
+          "default": "Before"
+        },
+        {
+          "type": "image_picker",
+          "id": "after_image",
+          "label": "After image"
+        },
+        {
+          "type": "text",
+          "id": "after_label",
+          "label": "After label",
+          "default": "After"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Caption"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Before After",
+      "blocks": [
+        {
+          "type": "comparison_pair",
+          "settings": {
+            "before_label": "Before",
+            "after_label": "After",
+            "caption": "Results may vary"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

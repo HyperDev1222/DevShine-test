@@ -15,6 +15,12 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
+    {%- if template.suffix == 'knr-product' -%}
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {%- endif -%}
+
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
@@ -330,11 +336,13 @@
       {%- render 'cart-drawer' -%}
     {%- endif -%}
 
-    {% sections 'header-group' %}
+    {%- unless template.suffix == 'knr-product' -%}
+      {% sections 'header-group' %}
+    {%- endunless -%}
 
     <main
       id="MainContent"
-      class="content-for-layout focus-none"
+      class="content-for-layout focus-none{% if template.suffix == 'knr-product' %} knr-product-page{% endif %}"
       role="main"
       tabindex="-1"
       data-template="{{ template.name }}"
@@ -342,7 +350,9 @@
       {{ content_for_layout }}
     </main>
 
-    {% sections 'footer-group' %}
+    {%- unless template.suffix == 'knr-product' -%}
+      {% sections 'footer-group' %}
+    {%- endunless -%}
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>

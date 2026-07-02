@@ -1,0 +1,87 @@
+.knr-how-to-use[data-section-id] {
+  --knr-htu-max-width: 1200px;
+  font-family: 'Inter', sans-serif;
+  padding: 4rem 1.5rem;
+  background: #fafafa;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__inner {
+  max-width: var(--knr-htu-max-width);
+  margin: 0 auto;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__heading {
+  font-size: 1.75rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 0.75rem;
+  color: #1a1a1a;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__subheading {
+  text-align: center;
+  color: #666;
+  margin: 0 0 2.5rem;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2rem;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  flex-shrink: 0;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__step-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__step-image img {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 8px;
+  display: block;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__step-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #1a1a1a;
+}
+
+.knr-how-to-use[data-section-id] .knr-how-to-use__step-body {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+@media screen and (min-width: 768px) {
+  .knr-how-to-use[data-section-id] .knr-how-to-use__step-content {
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+  }
+}

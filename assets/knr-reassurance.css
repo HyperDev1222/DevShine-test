@@ -1,0 +1,65 @@
+.knr-reassurance[data-section-id] {
+  --knr-reassurance-max-width: 1200px;
+  font-family: 'Inter', sans-serif;
+  padding: 3rem 1.5rem;
+  background: #fafafa;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__inner {
+  max-width: var(--knr-reassurance-max-width);
+  margin: 0 auto;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 2rem;
+  color: #1a1a1a;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__item {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #1a1a1a;
+}
+
+.knr-reassurance[data-section-id] .knr-reassurance__text {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media screen and (min-width: 768px) {
+  .knr-reassurance[data-section-id] .knr-reassurance__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,109 @@
+{{ 'knr-footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="knr-footer" data-section-id="{{ section.id }}" role="contentinfo">
+  <div class="knr-footer__inner">
+    <div class="knr-footer__top">
+      <div class="knr-footer__brand">
+        {%- if section.settings.logo != blank -%}
+          {{
+            section.settings.logo
+            | image_url: width: 160
+            | image_tag: class: 'knr-footer__logo', alt: shop.name, widths: '80, 120, 160'
+          }}
+        {%- else -%}
+          <span class="knr-footer__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+        {%- if section.settings.tagline != blank -%}
+          <p class="knr-footer__tagline">{{ section.settings.tagline | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.menu != blank -%}
+        <nav class="knr-footer__nav" aria-label="{{ section.settings.menu.title | escape }}">
+          <ul class="knr-footer__menu">
+            {%- for link in section.settings.menu.links -%}
+              <li>
+                <a href="{{ link.url }}" class="knr-footer__link">{{ link.title | escape }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+
+      {%- if section.settings.secondary_menu != blank -%}
+        <nav class="knr-footer__nav" aria-label="{{ section.settings.secondary_menu.title | escape }}">
+          <ul class="knr-footer__menu">
+            {%- for link in section.settings.secondary_menu.links -%}
+              <li>
+                <a href="{{ link.url }}" class="knr-footer__link">{{ link.title | escape }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
+
+    <div class="knr-footer__bottom">
+      <p class="knr-footer__copyright">
+        {{ section.settings.copyright_text | replace: '[shop_name]', shop.name | escape }}
+      </p>
+
+      {%- if section.settings.show_payment_icons -%}
+        <div class="knr-footer__payment">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'knr-footer__payment-icon' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "KNR Footer",
+  "tag": "section",
+  "class": "knr-section-footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Primary menu",
+      "default": "footer"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Secondary menu"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "default": "© [shop_name]. All rights reserved.",
+      "info": "Use [shop_name] for the store name"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Footer"
+    }
+  ]
+}
+{% endschema %}

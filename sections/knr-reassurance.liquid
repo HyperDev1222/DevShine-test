@@ -1,0 +1,102 @@
+{{ 'knr-reassurance.css' | asset_url | stylesheet_tag }}
+
+<section class="knr-reassurance" data-section-id="{{ section.id }}">
+  <div class="knr-reassurance__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="knr-reassurance__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="knr-reassurance__grid" role="list">
+        {%- for block in section.blocks -%}
+          <li class="knr-reassurance__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != blank -%}
+              <div class="knr-reassurance__icon">
+                {{
+                  block.settings.icon
+                  | image_url: width: 80
+                  | image_tag: loading: 'lazy', alt: block.settings.title, widths: '40, 60, 80'
+                }}
+              </div>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="knr-reassurance__title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="knr-reassurance__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KNR Reassurance",
+  "tag": "section",
+  "class": "knr-section-reassurance",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why choose us"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "reassurance_item",
+      "name": "Reassurance item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free shipping"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "On orders over $50"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Reassurance",
+      "blocks": [
+        {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "Free shipping",
+            "text": "On orders over $50"
+          }
+        },
+        {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "Secure payment",
+            "text": "100% protected checkout"
+          }
+        },
+        {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "Easy returns",
+            "text": "30-day return policy"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
