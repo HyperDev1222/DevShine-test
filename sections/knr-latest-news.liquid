@@ -1,0 +1,135 @@
+{{ 'knr-latest-news.css' | asset_url | stylesheet_tag }}
+
+<section class="knr-latest-news" data-section-id="{{ section.id }}">
+  <div class="knr-latest-news__inner">
+    <div class="knr-latest-news__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="knr-latest-news__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.show_view_all and section.settings.blog != blank -%}
+        <a href="{{ section.settings.blog.url }}" class="knr-latest-news__view-all">
+          {{ section.settings.view_all_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
+      <ul class="knr-latest-news__grid" role="list">
+        {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
+          <li class="knr-latest-news__card">
+            <a href="{{ article.url }}" class="knr-latest-news__link">
+              {%- if section.settings.show_image and article.image -%}
+                <div class="knr-latest-news__image-wrap">
+                  {{
+                    article.image
+                    | image_url: width: 600
+                    | image_tag: loading: 'lazy', alt: article.title, widths: '300, 400, 600'
+                  }}
+                </div>
+              {%- endif -%}
+              <div class="knr-latest-news__content">
+                {%- if section.settings.show_date -%}
+                  <time class="knr-latest-news__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{ article.published_at | date: format: 'month_day_year' }}
+                  </time>
+                {%- endif -%}
+                <h3 class="knr-latest-news__title">{{ article.title | escape }}</h3>
+                {%- if section.settings.show_excerpt -%}
+                  <p class="knr-latest-news__excerpt">
+                    {%- if article.excerpt != blank -%}
+                      {{ article.excerpt | strip_html | truncate: 120 }}
+                    {%- else -%}
+                      {{ article.content | strip_html | truncate: 120 }}
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+              </div>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- elsif section.settings.blog == blank -%}
+      <p class="knr-latest-news__empty">{{ section.settings.empty_message | escape }}</p>
+    {%- else -%}
+      <p class="knr-latest-news__empty">{{ section.settings.no_articles_message | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KNR Latest News",
+  "tag": "section",
+  "class": "knr-section-latest-news",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Latest news"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "label": "Number of articles",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show featured image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "View all"
+    },
+    {
+      "type": "text",
+      "id": "empty_message",
+      "label": "No blog selected message",
+      "default": "Select a blog in theme settings to display articles."
+    },
+    {
+      "type": "text",
+      "id": "no_articles_message",
+      "label": "No articles message",
+      "default": "No articles published yet."
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Latest News"
+    }
+  ]
+}
+{% endschema %}

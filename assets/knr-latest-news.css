@@ -1,0 +1,105 @@
+.knr-latest-news[data-section-id] {
+  --knr-news-max-width: 1200px;
+  font-family: 'Inter', sans-serif;
+  padding: 4rem 1.5rem;
+  background: #fafafa;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__inner {
+  max-width: var(--knr-news-max-width);
+  margin: 0 auto;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__heading {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__view-all {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__link:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__image-wrap {
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__content {
+  padding: 1.25rem;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__date {
+  font-size: 0.8125rem;
+  color: #999;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #1a1a1a;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__excerpt {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.knr-latest-news[data-section-id] .knr-latest-news__empty {
+  text-align: center;
+  color: #666;
+  font-size: 0.9375rem;
+}
+
+@media screen and (min-width: 768px) {
+  .knr-latest-news[data-section-id] .knr-latest-news__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,129 @@
+{{ 'knr-how-to-use.css' | asset_url | stylesheet_tag }}
+
+<section class="knr-how-to-use" data-section-id="{{ section.id }}">
+  <div class="knr-how-to-use__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="knr-how-to-use__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="knr-how-to-use__subheading">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ol class="knr-how-to-use__steps" role="list">
+        {%- for block in section.blocks -%}
+          <li class="knr-how-to-use__step" {{ block.shopify_attributes }}>
+            <div class="knr-how-to-use__step-number">
+              {%- if block.settings.step_number != blank -%}
+                {{ block.settings.step_number | escape }}
+              {%- else -%}
+                {{ forloop.index }}
+              {%- endif -%}
+            </div>
+            <div class="knr-how-to-use__step-content">
+              {%- if block.settings.image != blank -%}
+                <div class="knr-how-to-use__step-image">
+                  {{
+                    block.settings.image
+                    | image_url: width: 400
+                    | image_tag: loading: 'lazy', alt: block.settings.title, widths: '200, 300, 400'
+                  }}
+                </div>
+              {%- endif -%}
+              <div class="knr-how-to-use__step-text">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="knr-how-to-use__step-title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <div class="knr-how-to-use__step-body rte">{{ block.settings.body }}</div>
+                {%- endif -%}
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KNR How To Use",
+  "tag": "section",
+  "class": "knr-section-how-to-use",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "How to use"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Follow these simple steps"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Step number",
+          "info": "Leave blank to auto-number"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Step title"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body",
+          "default": "<p>Step description</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR How To Use",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Cleanse",
+            "body": "<p>Start with a clean, dry surface.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Apply",
+            "body": "<p>Apply a small amount to the desired area.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Repeat",
+            "body": "<p>Use daily for best results.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

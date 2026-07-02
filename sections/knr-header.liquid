@@ -1,0 +1,127 @@
+{{ 'knr-header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'knr-cart.js' | asset_url }}" defer="defer"></script>
+
+<header
+  class="knr-header"
+  data-section-id="{{ section.id }}"
+  role="banner"
+>
+  <div class="knr-header__inner">
+    <a href="{{ routes.root_url }}" class="knr-header__logo">
+      {%- if section.settings.logo != blank -%}
+        {{
+          section.settings.logo
+          | image_url: width: 200
+          | image_tag: class: 'knr-header__logo-image', alt: shop.name, widths: '100, 150, 200'
+        }}
+      {%- else -%}
+        <span class="knr-header__logo-text">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    {%- if section.settings.menu != blank -%}
+      <nav class="knr-header__nav" aria-label="{{ section.settings.menu.title | escape }}">
+        <ul class="knr-header__menu">
+          {%- for link in section.settings.menu.links -%}
+            <li class="knr-header__menu-item">
+              <a
+                href="{{ link.url }}"
+                class="knr-header__menu-link{% if link.active %} knr-header__menu-link--active{% endif %}"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                {{ link.title | escape }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="knr-header__actions">
+      <button
+        type="button"
+        class="knr-header__menu-toggle"
+        aria-label="{{ section.settings.mobile_menu_label | escape }}"
+        aria-expanded="false"
+        data-knr-menu-toggle
+      >
+        <span class="knr-header__menu-toggle-bar"></span>
+        <span class="knr-header__menu-toggle-bar"></span>
+        <span class="knr-header__menu-toggle-bar"></span>
+      </button>
+
+      <a href="{{ routes.cart_url }}" class="knr-header__cart" aria-label="{{ 'templates.cart.cart' | t }}">
+        <svg class="knr-header__cart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="9" cy="20" r="1" fill="currentColor"/>
+          <circle cx="18" cy="20" r="1" fill="currentColor"/>
+          <path d="M6 6L5 3H2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span
+          class="knr-header__cart-badge{% if cart.item_count < 1 %} knr-header__cart-badge--empty{% endif %}"
+          data-knr-cart-badge
+          {% if cart.item_count < 1 %}hidden{% endif %}
+        >
+          <span data-knr-cart-count>{{ cart.item_count }}</span>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  {%- if section.settings.menu != blank -%}
+    <nav class="knr-header__mobile-nav" hidden data-knr-mobile-nav aria-label="{{ section.settings.menu.title | escape }}">
+      <ul class="knr-header__mobile-menu">
+        {%- for link in section.settings.menu.links -%}
+          <li>
+            <a href="{{ link.url }}" class="knr-header__mobile-link">{{ link.title | escape }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var toggle = document.querySelector('[data-knr-menu-toggle]');
+    var mobileNav = document.querySelector('[data-knr-mobile-nav]');
+    if (!toggle || !mobileNav) return;
+    toggle.addEventListener('click', function () {
+      var expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', !expanded);
+      mobileNav.hidden = expanded;
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "KNR Header",
+  "tag": "section",
+  "class": "knr-section-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "mobile_menu_label",
+      "label": "Mobile menu button label",
+      "default": "Open menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Header"
+    }
+  ]
+}
+{% endschema %}

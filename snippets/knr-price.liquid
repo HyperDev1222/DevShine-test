@@ -1,0 +1,55 @@
+{% comment %}
+  Renders KNR scoped product price with optional compare-at strikethrough.
+
+  Accepts:
+  - variant: {Object} Variant Liquid object (required unless product passed)
+  - product: {Object} Product Liquid object — uses selected_or_first_available_variant
+  - price_class: {String} Additional CSS class for the wrapper
+  - id: {String} Optional id attribute for JS targeting
+{% endcomment %}
+{%- liquid
+  if variant == blank and product != blank
+    assign variant = product.selected_or_first_available_variant
+  endif
+
+  assign compare_at_price = variant.compare_at_price
+  assign price = variant.price
+  assign available = variant.available
+
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign money_compare_at = compare_at_price | money_with_currency
+  else
+    assign money_price = price | money
+    assign money_compare_at = compare_at_price | money
+  endif
+
+  assign on_sale = false
+  if compare_at_price != blank and compare_at_price > price
+    assign on_sale = true
+  endif
+-%}
+
+{%- if variant != blank -%}
+  <div
+    class="knr-price{% if price_class %} {{ price_class }}{% endif %}{% unless available %} knr-price--sold-out{% endunless %}{% if on_sale %} knr-price--on-sale{% endif %}"
+    {% if id != blank %}id="{{ id }}"{% endif %}
+    data-knr-price
+  >
+    <span
+      class="knr-price__compare{% unless on_sale %} knr-price__compare--hidden{% endunless %}"
+      {% unless on_sale %}hidden{% endunless %}
+      data-knr-compare-wrap
+    >
+      <s class="knr-price__compare-value" data-knr-compare-at>
+        {%- if on_sale -%}{{ money_compare_at }}{%- endif -%}
+      </s>
+    </span>
+
+    <span class="knr-price__current" data-knr-current-price>{{ money_price }}</span>
+
+    {%- unless available -%}
+      <span class="knr-price__badge">{{ 'products.product.sold_out' | t }}</span>
+    {%- endunless -%}
+  </div>
+{%- endif -%}
