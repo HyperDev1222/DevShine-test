@@ -1,0 +1,108 @@
+{{ 'knr-announcement-bar.css' | asset_url | stylesheet_tag }}
+
+{%- if section.settings.text != blank or section.settings.link_text != blank -%}
+  <div
+    class="knr-announcement-bar"
+    data-section-id="{{ section.id }}"
+    role="region"
+    aria-label="{{ section.settings.aria_label | escape }}"
+  >
+    <p class="knr-announcement-bar__text">
+      {%- if section.settings.text != blank -%}
+        <span>{{ section.settings.text | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.link_text != blank -%}
+        {%- if section.settings.link != blank -%}
+          <a href="{{ section.settings.link }}" class="knr-announcement-bar__link-text">{{ section.settings.link_text | escape }}</a>
+        {%- else -%}
+          <span class="knr-announcement-bar__link-text knr-announcement-bar__link-text--static">{{ section.settings.link_text | escape }}</span>
+        {%- endif -%}
+      {%- endif -%}
+    </p>
+  </div>
+{%- endif -%}
+
+{%- style -%}
+  .knr-announcement-bar[data-section-id="{{ section.id }}"] {
+    background-color: {{ section.settings.background_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    color: {{ section.settings.text_color }};
+  }
+
+  .knr-announcement-bar[data-section-id="{{ section.id }}"] .knr-announcement-bar__text,
+  .knr-announcement-bar[data-section-id="{{ section.id }}"] .knr-announcement-bar__link-text {
+    color: {{ section.settings.text_color }};
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "KNR Announcement Bar",
+  "tag": "section",
+  "class": "knr-section-announcement-bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Accessibility label",
+      "default": "Announcement"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Livraison estimée sous 48h "
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Underlined link text",
+      "default": "consectetur."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link URL",
+      "info": "Optional — applies to the underlined text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

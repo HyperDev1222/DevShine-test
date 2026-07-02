@@ -1,7 +1,8 @@
 .knr-product-main[data-section-id] {
-  --knr-product-max-width: 1200px;
+  --knr-product-max-width: 1280px;
   font-family: 'Inter', sans-serif;
-  padding: 2rem 1.5rem 4rem;
+  padding: 0 40px 4rem;
+  background-color: #f4f1ee;
 }
 
 .knr-product-main[data-section-id] .knr-product-main__inner {
@@ -180,5 +181,11 @@
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: start;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .knr-product-main[data-section-id] {
+    padding: 0 20px 3rem;
   }
 }
