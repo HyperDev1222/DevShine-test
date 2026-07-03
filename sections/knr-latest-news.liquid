@@ -1,6 +1,9 @@
 {{ 'knr-latest-news.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+<script src="{{ 'knr-latest-news.js' | asset_url }}" defer="defer"></script>
 
-<section class="knr-latest-news" data-section-id="{{ section.id }}">
+<section class="knr-latest-news" data-section-id="{{ section.id }}" data-knr-latest-news>
   <div class="knr-latest-news__inner">
     <div class="knr-latest-news__header">
       {%- if section.settings.heading != blank -%}
@@ -8,47 +11,52 @@
       {%- endif -%}
 
       {%- if section.settings.show_view_all and section.settings.blog != blank -%}
-        <a href="{{ section.settings.blog.url }}" class="knr-latest-news__view-all">
+        <a href="{{ section.settings.blog.url }}" class="knr-latest-news__view-all knr-latest-news__view-all--header">
           {{ section.settings.view_all_label | escape }}
         </a>
       {%- endif -%}
     </div>
 
+    <div class="knr-latest-news__divider" aria-hidden="true"></div>
+
     {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
-      <ul class="knr-latest-news__grid" role="list">
-        {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
-          <li class="knr-latest-news__card">
-            <a href="{{ article.url }}" class="knr-latest-news__link">
-              {%- if section.settings.show_image and article.image -%}
-                <div class="knr-latest-news__image-wrap">
-                  {{
-                    article.image
-                    | image_url: width: 600
-                    | image_tag: loading: 'lazy', alt: article.title, widths: '300, 400, 600'
-                  }}
-                </div>
-              {%- endif -%}
-              <div class="knr-latest-news__content">
-                {%- if section.settings.show_date -%}
-                  <time class="knr-latest-news__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
-                    {{ article.published_at | date: format: 'month_day_year' }}
-                  </time>
-                {%- endif -%}
-                <h3 class="knr-latest-news__title">{{ article.title | escape }}</h3>
-                {%- if section.settings.show_excerpt -%}
-                  <p class="knr-latest-news__excerpt">
-                    {%- if article.excerpt != blank -%}
-                      {{ article.excerpt | strip_html | truncate: 120 }}
-                    {%- else -%}
-                      {{ article.content | strip_html | truncate: 120 }}
-                    {%- endif -%}
-                  </p>
-                {%- endif -%}
-              </div>
-            </a>
-          </li>
-        {%- endfor -%}
-      </ul>
+      {%- assign article_limit = section.settings.post_limit -%}
+      <div
+        class="knr-latest-news__slider swiper"
+        data-knr-news-swiper
+        style="--knr-news-columns: {{ article_limit | at_most: 4 }};"
+      >
+        <div class="swiper-wrapper knr-latest-news__grid">
+          {%- for article in section.settings.blog.articles limit: article_limit -%}
+            {% render 'knr-latest-news-card',
+              article: article,
+              show_image: section.settings.show_image
+            %}
+          {%- endfor -%}
+        </div>
+
+        <div class="knr-latest-news__progress" data-knr-news-progress role="tablist" aria-label="{{ section.settings.heading | escape }}">
+          {%- for article in section.settings.blog.articles limit: article_limit -%}
+            <button
+              type="button"
+              class="knr-latest-news__progress-segment{% if forloop.first %} is-active{% endif %}"
+              data-knr-news-progress-segment
+              data-slide-index="{{ forloop.index0 }}"
+              role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-label="Go to article {{ forloop.index }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- if section.settings.show_view_all -%}
+        <div class="knr-latest-news__footer">
+          <a href="{{ section.settings.blog.url }}" class="knr-latest-news__view-all knr-latest-news__view-all--footer">
+            {{ section.settings.view_all_label | escape }}
+          </a>
+        </div>
+      {%- endif -%}
     {%- elsif section.settings.blog == blank -%}
       <p class="knr-latest-news__empty">{{ section.settings.empty_message | escape }}</p>
     {%- else -%}
@@ -63,6 +71,10 @@
   "tag": "section",
   "class": "knr-section-latest-news",
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "Articles are pulled from a Shopify blog. Use the article title as the card label, an h3 in the content as the card heading, and excerpt or first paragraph as body text."
+    },
     {
       "type": "text",
       "id": "heading",
@@ -79,26 +91,14 @@
       "id": "post_limit",
       "label": "Number of articles",
       "min": 1,
-      "max": 6,
+      "max": 8,
       "step": 1,
-      "default": 3
+      "default": 4
     },
     {
       "type": "checkbox",
       "id": "show_image",
       "label": "Show featured image",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_date",
-      "label": "Show date",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_excerpt",
-      "label": "Show excerpt",
       "default": true
     },
     {
@@ -111,7 +111,7 @@
       "type": "text",
       "id": "view_all_label",
       "label": "View all label",
-      "default": "View all"
+      "default": "Voir tous les articles"
     },
     {
       "type": "text",

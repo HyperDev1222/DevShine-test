@@ -112,12 +112,14 @@ snippets/
   knr-faq-item.liquid           # Single FAQ accordion item
   knr-before-after-comparison.liquid # Draggable comparison slider
   knr-testimonial-slide.liquid  # Testimonial swiper slide
+  knr-latest-news-card.liquid   # Blog article card
 
 assets/
   knr-*.css                    # Scoped section styles
   knr-product-gallery.js       # Media grid, lightbox, accordions
   knr-how-to-use.js             # Mobile Swiper slider
   knr-before-after.js           # Comparison slider + testimonial Swiper
+  knr-latest-news.js            # Mobile blog Swiper + progress bar
   knr-variant-picker.js        # Variant selection + live price/media
   knr-cart.js                  # Add to cart + badge update
 ```
@@ -234,7 +236,34 @@ Use the **same dimensions** for both images. The section renders a draggable com
 | `question` | Question | Single line text | Yes |
 | `answer` | Answer | Multi-line text | Yes |
 
-**Product metafield:** `knr.faq_items` (list of metaobjects). Order = display order. One accordion open at a time.
+**Product metafield:** `knr.faq_items` (list of metaobjects). Order = display order. Multiple items can stay open at once.
+
+## KNR Latest News — blog setup
+
+### Section settings (theme editor)
+
+- **Heading** — e.g. `Latest news`
+- **Blog** — select the Shopify blog (e.g. News)
+- **Number of articles** — default 4
+- **View all label** — e.g. `Voir tous les articles`
+
+### Article content structure
+
+| Shopify field | Card element |
+|---------------|--------------|
+| **Title** | Small label (e.g. `L'origine`) + short line |
+| **Content → first `<h3>`** | Card heading |
+| **Excerpt**, else **first `<p>`** | Body text |
+| **Featured image** | Card image |
+
+Example content:
+
+```html
+<h3>Fondée en 2012<br>dans les Alpes</h3>
+<p>Maison Célestine est née de la passion d'une botaniste...</p>
+```
+
+**Desktop:** 4-column grid, view-all in header. **Mobile:** swiper (no right gutter), clickable progress bar, view-all centered below.
 
 ### Media dots (below stock message)
 

@@ -1,0 +1,72 @@
+{% comment %}
+  Latest news blog card.
+
+  Blog post structure:
+  - article.title → label (e.g. L'origine)
+  - First <h3> in content → card heading
+  - Excerpt, else first <p> in content → body text
+  - Featured image
+
+  Accepts:
+  - article: {Object} Shopify article
+  - show_image: {Boolean}
+{% endcomment %}
+{%- liquid
+  assign article_label = article.title
+  assign card_heading = blank
+  assign card_body = blank
+
+  if article.content contains '<h3>'
+    assign h3_parts = article.content | split: '<h3>'
+    if h3_parts.size > 1
+      assign h3_chunk = h3_parts[1] | split: '</h3>' | first
+      assign card_heading = h3_chunk | replace: '<br>', ' ' | replace: '<br/>', ' ' | replace: '<br />', ' ' | strip_html | strip
+    endif
+  elsif article.content contains '<h2>'
+    assign h2_parts = article.content | split: '<h2>'
+    if h2_parts.size > 1
+      assign h2_chunk = h2_parts[1] | split: '</h2>' | first
+      assign card_heading = h2_chunk | replace: '<br>', ' ' | replace: '<br/>', ' ' | replace: '<br />', ' ' | strip_html | strip
+    endif
+  endif
+
+  if article.excerpt != blank
+    assign card_body = article.excerpt | strip_html | strip
+  elsif article.content contains '<p>'
+    assign p_parts = article.content | split: '<p>'
+    if p_parts.size > 1
+      assign p_chunk = p_parts[1] | split: '</p>' | first
+      assign card_body = p_chunk | strip_html | strip
+    endif
+  endif
+
+  if card_heading == blank
+    assign card_heading = article.title
+    assign article_label = blank
+  endif
+-%}
+
+<a href="{{ article.url }}" class="knr-latest-news__card swiper-slide">
+  {%- if show_image and article.image -%}
+    <div class="knr-latest-news__image-wrap">
+      {{
+        article.image
+        | image_url: width: 800
+        | image_tag: loading: 'lazy', alt: card_heading, widths: '400, 600, 800'
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="knr-latest-news__card-body">
+    {%- if article_label != blank -%}
+      <p class="knr-latest-news__label">{{ article_label | escape }}</p>
+      <span class="knr-latest-news__label-line" aria-hidden="true"></span>
+    {%- endif -%}
+
+    <h3 class="knr-latest-news__card-title">{{ card_heading | escape }}</h3>
+
+    {%- if card_body != blank -%}
+      <p class="knr-latest-news__card-text">{{ card_body | escape }}</p>
+    {%- endif -%}
+  </div>
+</a>

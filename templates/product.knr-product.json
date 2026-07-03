@@ -108,13 +108,11 @@
       "type": "knr-latest-news",
       "settings": {
         "heading": "Latest news",
-        "blog": "",
-        "post_limit": 3,
+        "blog": "news",
+        "post_limit": 4,
         "show_image": true,
-        "show_date": true,
-        "show_excerpt": true,
         "show_view_all": true,
-        "view_all_label": "View all",
+        "view_all_label": "Voir tous les articles",
         "empty_message": "Select a blog in theme settings to display articles.",
         "no_articles_message": "No articles published yet."
       }
