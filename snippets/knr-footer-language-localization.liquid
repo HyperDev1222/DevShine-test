@@ -1,0 +1,51 @@
+{%- comment -%}
+  Footer language picker — compact endonym label.
+
+  Accepts:
+    - localPosition: {String}
+{%- endcomment -%}
+
+<div class="disclosure knr-footer__locale">
+  <button
+    type="button"
+    class="disclosure__button localization-form__select knr-footer__locale-trigger"
+    aria-expanded="false"
+    aria-controls="{{ localPosition }}List"
+    aria-describedby="{{ localPosition }}Label"
+  >
+    <span class="knr-footer__locale-label">{{ localization.language.endonym_name }}</span>
+    <span class="knr-footer__locale-caret" aria-hidden="true">
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </span>
+  </button>
+
+  <div class="disclosure__list-wrapper language-selector knr-footer__locale-panel" hidden>
+    <ul id="{{ localPosition }}List" role="list" class="disclosure__list list-unstyled">
+      {%- for language in localization.available_languages -%}
+        <li class="disclosure__item" tabindex="-1">
+          <a
+            class="link link--text disclosure__link knr-footer__locale-option focus-inset"
+            href="#"
+            hreflang="{{ language.iso_code }}"
+            lang="{{ language.iso_code }}"
+            {% if language.iso_code == localization.language.iso_code %}
+              aria-current="true"
+            {% endif %}
+            data-value="{{ language.iso_code }}"
+          >
+            <span
+              class="knr-footer__locale-check"
+              {% if language.iso_code != localization.language.iso_code %}
+                hidden
+              {% endif %}
+            >
+              {{- 'icon-checkmark.svg' | inline_asset_content -}}
+            </span>
+            <span>{{ language.endonym_name }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+<input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">

@@ -1,0 +1,57 @@
+{% comment %}
+  Footer social icons (Facebook, Instagram, TikTok, LinkedIn).
+
+  Accepts:
+  - linkedin_url: {String} Optional LinkedIn URL from section settings
+{% endcomment %}
+{%- liquid
+  assign linkedin_link = linkedin_url | default: ''
+  assign has_social = false
+
+  if settings.social_facebook_link != blank
+    assign has_social = true
+  elsif settings.social_instagram_link != blank
+    assign has_social = true
+  elsif settings.social_tiktok_link != blank
+    assign has_social = true
+  elsif linkedin_link != blank
+    assign has_social = true
+  endif
+-%}
+
+{%- if has_social -%}
+  <ul class="knr-footer__social-list" role="list">
+    {%- if settings.social_facebook_link != blank -%}
+      <li>
+        <a href="{{ settings.social_facebook_link }}" class="knr-footer__social-link" target="_blank" rel="noopener noreferrer">
+          <span class="knr-footer__social-icon">{{ 'icon-facebook.svg' | inline_asset_content }}</span>
+          <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_instagram_link != blank -%}
+      <li>
+        <a href="{{ settings.social_instagram_link }}" class="knr-footer__social-link" target="_blank" rel="noopener noreferrer">
+          <span class="knr-footer__social-icon">{{ 'icon-instagram.svg' | inline_asset_content }}</span>
+          <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if settings.social_tiktok_link != blank -%}
+      <li>
+        <a href="{{ settings.social_tiktok_link }}" class="knr-footer__social-link" target="_blank" rel="noopener noreferrer">
+          <span class="knr-footer__social-icon">{{ 'icon-tiktok.svg' | inline_asset_content }}</span>
+          <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+        </a>
+      </li>
+    {%- endif -%}
+    {%- if linkedin_link != blank -%}
+      <li>
+        <a href="{{ linkedin_link }}" class="knr-footer__social-link" target="_blank" rel="noopener noreferrer">
+          <span class="knr-footer__social-icon">{{ 'icon-linkedin.svg' | inline_asset_content }}</span>
+          <span class="visually-hidden">LinkedIn</span>
+        </a>
+      </li>
+    {%- endif -%}
+  </ul>
+{%- endif -%}

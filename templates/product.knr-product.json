@@ -174,11 +174,25 @@
     "knr-footer": {
       "type": "knr-footer",
       "settings": {
-        "tagline": "",
-        "menu": "footer",
-        "secondary_menu": "",
-        "copyright_text": "© [shop_name]. All rights reserved.",
-        "show_payment_icons": true
+        "background_color": "#f9f6f1",
+        "menu_1_heading": "Découvrir",
+        "menu_1": "d-couvrir",
+        "menu_2_heading": "Service client",
+        "menu_2": "service-client",
+        "menu_3_heading": "Légal & Transparence",
+        "menu_3": "l-gal-transparence",
+        "about_heading": "À propos de Maison Célestine",
+        "about_text": "<p>Maison Célestine conçoit une gamme de soins anti-âge haut de gamme, formulée avec des actifs rares certifiés biologiques.</p>",
+        "certification_image": "shopify://shop_images/Calque_1.svg",
+        "certification_caption": "Certifié COSMOS ORGANIC par ECOCERT Greenlife.",
+        "certificate_link_label": "Voir le certificat",
+        "certificate_link_url": "#",
+        "footer_logo": "shopify://shop_images/Union_fd093c86-c80c-4b54-a562-708360d7891c.png",
+        "copyright_text": "© [year] Maison Célestine. Tous droits réservés.",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "show_social": true,
+        "social_linkedin_url": "#"
       }
     }
   },
