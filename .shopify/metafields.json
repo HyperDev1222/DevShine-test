@@ -112,6 +112,14 @@
       "description": "Customer testimonials for the Before & After section slider.",
       "type": "list.metaobject_reference",
       "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "faq_items",
+      "name": "FAQ items",
+      "description": "Ordered FAQ accordion entries for the product page.",
+      "type": "list.metaobject_reference",
+      "ownerType": "PRODUCT"
     }
   ],
   "metaobject_definitions": [
@@ -219,6 +227,27 @@
         {
           "key": "quote",
           "name": "Quote",
+          "type": "multi_line_text_field",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "FAQ item",
+      "type": "knr_faq_item",
+      "access": {
+        "storefront": "PUBLIC_READ"
+      },
+      "field_definitions": [
+        {
+          "key": "question",
+          "name": "Question",
+          "type": "single_line_text_field",
+          "required": true
+        },
+        {
+          "key": "answer",
+          "name": "Answer",
           "type": "multi_line_text_field",
           "required": true
         }

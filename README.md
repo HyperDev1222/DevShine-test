@@ -109,6 +109,7 @@ snippets/
   knr-product-accordions.liquid # Accordion blocks
   knr-product-ritual.liquid     # Collection upsell carousel
   knr-how-to-use-step.liquid    # Single How to use step card
+  knr-faq-item.liquid           # Single FAQ accordion item
   knr-before-after-comparison.liquid # Draggable comparison slider
   knr-testimonial-slide.liquid  # Testimonial swiper slide
 
@@ -141,10 +142,11 @@ Create these **product** metafield definitions in **Settings → Custom data →
 | `knr.how_to_use_steps` | List · Metaobject · **How to use step** | Ordered steps for the How to use section |
 | `knr.before_after` | Metaobject · **Before and after** | Draggable before/after comparison |
 | `knr.testimonials` | List · Metaobject · **Testimonial** | Testimonial slider entries |
+| `knr.faq_items` | List · Metaobject · **FAQ item** | FAQ accordion entries |
 
 **Still from Shopify product data (not metafields):** title, variants, prices, unit price, compare-at price, media gallery.
 
-**Still from theme editor:** ritual upsell collection, layout settings, accordion heading labels, button labels, How to use / Before & After section headings.
+**Still from theme editor:** ritual upsell collection, layout settings, accordion heading labels, button labels, How to use / Before & After / FAQ section headings.
 
 ## KNR How To Use — metaobject setup
 
@@ -216,6 +218,24 @@ Use the **same dimensions** for both images. The section renders a draggable com
 
 **Product metafield:** `knr.testimonials` (list of metaobjects). Order = slider order. Prev/next arrows on desktop and mobile.
 
+## KNR FAQ — metaobject setup
+
+### Section settings (theme editor)
+
+- **Heading** — e.g. `Questions fréquentes`
+- **Open first item by default** — first accordion expanded on load
+
+### Metaobject: FAQ item
+
+**Type:** `knr_faq_item` · **Storefront access:** Read
+
+| Field key | Name | Type | Required |
+|-----------|------|------|----------|
+| `question` | Question | Single line text | Yes |
+| `answer` | Answer | Multi-line text | Yes |
+
+**Product metafield:** `knr.faq_items` (list of metaobjects). Order = display order. One accordion open at a time.
+
 ### Media dots (below stock message)
 
 One dot is rendered per visible product image for the selected variant. Clicking a dot sets that image as the hero and updates the secondary grid — this controls the left-hand gallery from the info panel.
@@ -226,11 +246,12 @@ One dot is rendered per visible product image for the selected variant. Clicking
 - **Strikethrough price** — `variant.compare_at_price`
 - **Cart badge** — `cart.item_count` (updates via AJAX after add to cart)
 - **Breadcrumb** — inline in product info panel (collection context + `product.title`)
-- **Tags, rating, intro, certification, stock, accordions, how to use steps, before/after, testimonials** — `product.metafields.knr.*`
+- **Tags, rating, intro, certification, stock, accordions, how to use steps, before/after, testimonials, faq items** — `product.metafields.knr.*`
 - **Media grid** — `product.media` filtered by variant; hero uses variant featured image
 - **Ritual upsell** — products from selected collection in theme editor
 - **Navigation** — Shopify menus (`link_list` settings)
-- **FAQ, reassurance** — section blocks in theme editor
+- **Reassurance** — section blocks in theme editor
+- **FAQ** — product metafield `knr.faq_items` (metaobjects); heading in theme editor
 - **How to use** — product metafield `knr.how_to_use_steps` (metaobjects); section heading in theme editor
 - **Before & after** — product metafields `knr.before_after` + `knr.testimonials`; heading/description in theme editor
 - **Latest news** — blog articles from selected blog

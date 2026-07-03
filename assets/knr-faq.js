@@ -7,15 +7,13 @@
           const panel = item?.querySelector('[data-knr-faq-panel]');
           const isOpen = item?.classList.contains('knr-faq__item--open');
 
-          faqRoot.querySelectorAll('[data-knr-faq-item]').forEach((otherItem) => {
-            otherItem.classList.remove('knr-faq__item--open');
-            const otherPanel = otherItem.querySelector('[data-knr-faq-panel]');
-            const otherTrigger = otherItem.querySelector('[data-knr-faq-trigger]');
-            if (otherPanel) otherPanel.hidden = true;
-            if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
-          });
+          if (!item || !panel) return;
 
-          if (!isOpen && item && panel) {
+          if (isOpen) {
+            item.classList.remove('knr-faq__item--open');
+            panel.hidden = true;
+            trigger.setAttribute('aria-expanded', 'false');
+          } else {
             item.classList.add('knr-faq__item--open');
             panel.hidden = false;
             trigger.setAttribute('aria-expanded', 'true');

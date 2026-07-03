@@ -1,0 +1,39 @@
+{% comment %}
+  Single FAQ accordion item.
+
+  Accepts:
+  - item: {Metaobject} knr_faq_item
+  - section_id: {String}
+  - index: {Number}
+  - open: {Boolean}
+{% endcomment %}
+{%- liquid
+  assign question = item.question.value
+  assign answer = item.answer.value
+  assign panel_id = 'knr-faq-panel-' | append: section_id | append: '-' | append: index
+-%}
+
+<div
+  class="knr-faq__item{% if open %} knr-faq__item--open{% endif %}"
+  data-knr-faq-item
+>
+  <button
+    type="button"
+    class="knr-faq__trigger"
+    data-knr-faq-trigger
+    aria-expanded="{% if open %}true{% else %}false{% endif %}"
+    aria-controls="{{ panel_id }}"
+  >
+    <span class="knr-faq__question">{{ question | escape }}</span>
+    <span class="knr-faq__icon" aria-hidden="true"></span>
+  </button>
+  <div
+    id="{{ panel_id }}"
+    class="knr-faq__panel"
+    data-knr-faq-panel
+    role="region"
+    {% unless open %}hidden{% endunless %}
+  >
+    {{ answer | escape | newline_to_br }}
+  </div>
+</div>
