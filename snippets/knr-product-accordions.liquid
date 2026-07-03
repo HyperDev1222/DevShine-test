@@ -1,0 +1,136 @@
+{% comment %}
+  Product accordions populated from product metafields (namespace: knr).
+
+  Accepts:
+  - product: {Object}
+  - section: {Object}
+{% endcomment %}
+{%- liquid
+  assign mf = product.metafields.knr
+
+  assign description_content = mf.description.value
+  if description_content == blank
+    assign description_content = product.description
+  endif
+
+  assign description_image = mf.description_image.value
+
+  assign accordion_items = ''
+  assign has_accordions = false
+
+  if description_content != blank or description_image != blank
+    assign has_accordions = true
+  endif
+  if mf.benefits.value != blank
+    assign has_accordions = true
+  endif
+  if mf.key_ingredients.value != blank
+    assign has_accordions = true
+  endif
+  if mf.skin_types.value != blank
+    assign has_accordions = true
+  endif
+-%}
+
+{%- if has_accordions -%}
+  <div class="knr-product-accordions" data-knr-product-accordions>
+    {%- if description_content != blank or description_image != blank -%}
+      <div
+        class="knr-product-accordions__item{% if section.settings.open_first_accordion %} knr-product-accordions__item--open{% endif %}"
+        data-knr-accordion-item
+      >
+        <button
+          type="button"
+          class="knr-product-accordions__trigger"
+          data-knr-accordion-trigger
+          aria-expanded="{% if section.settings.open_first_accordion %}true{% else %}false{% endif %}"
+          aria-controls="knr-accordion-description"
+        >
+          <span>{{ section.settings.description_heading | default: 'Description' | escape }}</span>
+          <span class="knr-product-accordions__icon" aria-hidden="true"></span>
+        </button>
+        <div
+          id="knr-accordion-description"
+          class="knr-product-accordions__panel"
+          data-knr-accordion-panel
+          {% unless section.settings.open_first_accordion %}hidden{% endunless %}
+        >
+          <div class="knr-product-accordions__panel-inner">
+            {%- if description_image != blank -%}
+              <div class="knr-product-accordions__panel-media">
+                {{
+                  description_image
+                  | image_url: width: 800
+                  | image_tag: loading: 'lazy', alt: product.title, widths: '400, 600, 800'
+                }}
+              </div>
+            {%- endif -%}
+            {%- if description_content != blank -%}
+              <div class="knr-product-accordions__panel-text rte">
+                {%- if mf.description.value != blank -%}
+                  {{ mf.description | metafield_tag }}
+                {%- else -%}
+                  {{ description_content }}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if mf.benefits.value != blank -%}
+      <div class="knr-product-accordions__item" data-knr-accordion-item>
+        <button
+          type="button"
+          class="knr-product-accordions__trigger"
+          data-knr-accordion-trigger
+          aria-expanded="false"
+          aria-controls="knr-accordion-benefits"
+        >
+          <span>{{ section.settings.benefits_heading | default: 'Bienfaits' | escape }}</span>
+          <span class="knr-product-accordions__icon" aria-hidden="true"></span>
+        </button>
+        <div id="knr-accordion-benefits" class="knr-product-accordions__panel rte" data-knr-accordion-panel hidden>
+          {{ mf.benefits | metafield_tag }}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if mf.key_ingredients.value != blank -%}
+      <div class="knr-product-accordions__item" data-knr-accordion-item>
+        <button
+          type="button"
+          class="knr-product-accordions__trigger"
+          data-knr-accordion-trigger
+          aria-expanded="false"
+          aria-controls="knr-accordion-ingredients"
+        >
+          <span>{{ section.settings.ingredients_heading | default: 'Ingrédients clés' | escape }}</span>
+          <span class="knr-product-accordions__icon" aria-hidden="true"></span>
+        </button>
+        <div id="knr-accordion-ingredients" class="knr-product-accordions__panel rte" data-knr-accordion-panel hidden>
+          {{ mf.key_ingredients | metafield_tag }}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if mf.skin_types.value != blank -%}
+      <div class="knr-product-accordions__item" data-knr-accordion-item>
+        <button
+          type="button"
+          class="knr-product-accordions__trigger"
+          data-knr-accordion-trigger
+          aria-expanded="false"
+          aria-controls="knr-accordion-skin"
+        >
+          <span>{{ section.settings.skin_types_heading | default: 'Adapté aux peaux' | escape }}</span>
+          <span class="knr-product-accordions__icon" aria-hidden="true"></span>
+        </button>
+        <div id="knr-accordion-skin" class="knr-product-accordions__panel rte" data-knr-accordion-panel hidden>
+          {{ mf.skin_types | metafield_tag }}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

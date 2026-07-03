@@ -36,6 +36,8 @@
     {% if id != blank %}id="{{ id }}"{% endif %}
     data-knr-price
   >
+    <span class="knr-price__current" data-knr-current-price>{{ money_price }}</span>
+
     <span
       class="knr-price__compare{% unless on_sale %} knr-price__compare--hidden{% endunless %}"
       {% unless on_sale %}hidden{% endunless %}
@@ -45,8 +47,6 @@
         {%- if on_sale -%}{{ money_compare_at }}{%- endif -%}
       </s>
     </span>
-
-    <span class="knr-price__current" data-knr-current-price>{{ money_price }}</span>
 
     {%- unless available -%}
       <span class="knr-price__badge">{{ 'products.product.sold_out' | t }}</span>
