@@ -88,6 +88,62 @@
       "description": "Rich text for the Adapté aux peaux accordion.",
       "type": "rich_text_field",
       "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "how_to_use_steps",
+      "name": "How to use steps",
+      "description": "Ordered list of How to use step metaobjects for the product page.",
+      "type": "list.metaobject_reference",
+      "ownerType": "PRODUCT"
+    }
+  ],
+  "metaobject_definitions": [
+    {
+      "name": "How to use step",
+      "type": "knr_how_to_use_step",
+      "access": {
+        "storefront": "PUBLIC_READ"
+      },
+      "field_definitions": [
+        {
+          "key": "step_number",
+          "name": "Step number",
+          "type": "single_line_text_field",
+          "description": "Display label e.g. 01, 02. Leave blank to auto-number."
+        },
+        {
+          "key": "title",
+          "name": "Title",
+          "type": "single_line_text_field",
+          "required": true
+        },
+        {
+          "key": "body",
+          "name": "Description",
+          "type": "multi_line_text_field",
+          "required": true
+        },
+        {
+          "key": "image",
+          "name": "Image",
+          "type": "file_reference",
+          "required": true,
+          "validations": [{ "name": "file_type_options", "value": "[\"Image\"]" }]
+        },
+        {
+          "key": "read_more_label",
+          "name": "Read more label",
+          "type": "single_line_text_field",
+          "description": "Mobile link label. Defaults to Lire plus."
+        },
+        {
+          "key": "read_more_url",
+          "name": "Read more URL",
+          "type": "url",
+          "description": "Optional link shown on mobile only."
+        }
+      ]
     }
   ]
 }

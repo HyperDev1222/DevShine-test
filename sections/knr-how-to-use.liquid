@@ -1,48 +1,54 @@
 {{ 'knr-how-to-use.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+<script src="{{ 'knr-how-to-use.js' | asset_url }}" defer="defer"></script>
 
-<section class="knr-how-to-use" data-section-id="{{ section.id }}">
+{%- liquid
+  assign steps = product.metafields.knr.how_to_use_steps.value
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = 'How to use'
+  endif
+-%}
+
+<section class="knr-how-to-use" data-section-id="{{ section.id }}" data-knr-how-to-use>
   <div class="knr-how-to-use__inner">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="knr-how-to-use__heading">{{ section.settings.heading | escape }}</h2>
-    {%- endif -%}
+    <h2 class="knr-how-to-use__heading">{{ heading | escape }}</h2>
 
-    {%- if section.settings.subheading != blank -%}
-      <p class="knr-how-to-use__subheading">{{ section.settings.subheading | escape }}</p>
-    {%- endif -%}
-
-    {%- if section.blocks.size > 0 -%}
-      <ol class="knr-how-to-use__steps" role="list">
-        {%- for block in section.blocks -%}
-          <li class="knr-how-to-use__step" {{ block.shopify_attributes }}>
-            <div class="knr-how-to-use__step-number">
-              {%- if block.settings.step_number != blank -%}
-                {{ block.settings.step_number | escape }}
-              {%- else -%}
-                {{ forloop.index }}
-              {%- endif -%}
-            </div>
-            <div class="knr-how-to-use__step-content">
-              {%- if block.settings.image != blank -%}
-                <div class="knr-how-to-use__step-image">
-                  {{
-                    block.settings.image
-                    | image_url: width: 400
-                    | image_tag: loading: 'lazy', alt: block.settings.title, widths: '200, 300, 400'
-                  }}
-                </div>
-              {%- endif -%}
-              <div class="knr-how-to-use__step-text">
-                {%- if block.settings.title != blank -%}
-                  <h3 class="knr-how-to-use__step-title">{{ block.settings.title | escape }}</h3>
-                {%- endif -%}
-                {%- if block.settings.body != blank -%}
-                  <div class="knr-how-to-use__step-body rte">{{ block.settings.body }}</div>
-                {%- endif -%}
-              </div>
-            </div>
-          </li>
-        {%- endfor -%}
-      </ol>
+    {%- if steps != blank and steps.size > 0 -%}
+      <div
+        class="knr-how-to-use__slider swiper"
+        data-knr-htu-swiper
+        style="--knr-htu-columns: {{ steps.size | at_most: 3 }};"
+      >
+        <div class="swiper-wrapper knr-how-to-use__steps">
+          {%- for step in steps -%}
+            {% render 'knr-how-to-use-step',
+              step: step,
+              index: forloop.index,
+              read_more_fallback: section.settings.read_more_label
+            %}
+          {%- endfor -%}
+        </div>
+        <div class="knr-how-to-use__progress" data-knr-htu-progress role="tablist" aria-label="{{ heading | escape }}">
+          {%- for step in steps -%}
+            <button
+              type="button"
+              class="knr-how-to-use__progress-segment{% if forloop.first %} is-active{% endif %}"
+              data-knr-htu-progress-segment
+              data-slide-index="{{ forloop.index0 }}"
+              role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-label="Go to step {{ forloop.index }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- elsif request.design_mode -%}
+      <p class="knr-how-to-use__empty">
+        Add steps via product metafield <strong>knr.how_to_use_steps</strong> (list of
+        <em>How to use step</em> metaobjects).
+      </p>
     {%- endif -%}
   </div>
 </section>
@@ -52,7 +58,12 @@
   "name": "KNR How To Use",
   "tag": "section",
   "class": "knr-section-how-to-use",
+  "templates": ["product"],
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "Steps come from the product metafield knr.how_to_use_steps (list of How to use step metaobjects). See README."
+    },
     {
       "type": "text",
       "id": "heading",
@@ -60,69 +71,16 @@
       "default": "How to use"
     },
     {
-      "type": "textarea",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Follow these simple steps"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "step",
-      "name": "Step",
-      "settings": [
-        {
-          "type": "text",
-          "id": "step_number",
-          "label": "Step number",
-          "info": "Leave blank to auto-number"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Step title"
-        },
-        {
-          "type": "richtext",
-          "id": "body",
-          "label": "Body",
-          "default": "<p>Step description</p>"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        }
-      ]
+      "type": "text",
+      "id": "read_more_label",
+      "label": "Read more label fallback",
+      "default": "Lire plus",
+      "info": "Used when a step metaobject has no read_more_label set."
     }
   ],
   "presets": [
     {
-      "name": "KNR How To Use",
-      "blocks": [
-        {
-          "type": "step",
-          "settings": {
-            "title": "Cleanse",
-            "body": "<p>Start with a clean, dry surface.</p>"
-          }
-        },
-        {
-          "type": "step",
-          "settings": {
-            "title": "Apply",
-            "body": "<p>Apply a small amount to the desired area.</p>"
-          }
-        },
-        {
-          "type": "step",
-          "settings": {
-            "title": "Repeat",
-            "body": "<p>Use daily for best results.</p>"
-          }
-        }
-      ]
+      "name": "KNR How To Use"
     }
   ]
 }

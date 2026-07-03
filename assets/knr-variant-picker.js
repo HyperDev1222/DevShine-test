@@ -115,7 +115,16 @@
     }
 
     container.querySelectorAll('[data-knr-option]').forEach((input) => {
-      input.addEventListener('change', handleChange);
+      input.addEventListener('change', () => {
+        container.querySelectorAll('[data-knr-option-group]').forEach((group) => {
+          group.querySelectorAll('.knr-product-main__option-link').forEach((link) => {
+            link.classList.remove('knr-product-main__option-link--active');
+          });
+          const checked = group.querySelector('[data-knr-option]:checked');
+          checked?.closest('.knr-product-main__option-link')?.classList.add('knr-product-main__option-link--active');
+        });
+        handleChange();
+      });
     });
 
     const urlVariantId = new URLSearchParams(window.location.search).get('variant');

@@ -1,0 +1,165 @@
+{{ 'knr-product-editorial.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'knr-product-editorial.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign selected_variant = product.selected_or_first_available_variant
+  assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+-%}
+
+<section
+  class="knr-product-editorial{% if section.settings.show_quick_add %} knr-product-editorial--has-quick-add{% endif %}"
+  data-section-id="{{ section.id }}"
+  style="--knr-editorial-overlay: {{ overlay_opacity }}; --knr-editorial-min-height: {{ section.settings.min_height }}px; --knr-editorial-mobile-focus-x: {{ section.settings.mobile_image_focus_x }}%; --knr-editorial-mobile-focus-y: {{ section.settings.mobile_image_focus_y }}%;"
+>
+  <div class="knr-product-editorial__background">
+    {%- if section.settings.background_image != blank -%}
+      {{
+        section.settings.background_image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'lazy',
+          class: 'knr-product-editorial__bg-img',
+          sizes: '100vw',
+          widths: '750, 1100, 1500, 2000, 2400'
+      }}
+    {%- else -%}
+      <div class="knr-product-editorial__bg-placeholder" aria-hidden="true"></div>
+    {%- endif -%}
+    <div class="knr-product-editorial__overlay" aria-hidden="true"></div>
+  </div>
+
+  <div class="knr-product-editorial__inner">
+    <div class="knr-product-editorial__grid">
+      <div class="knr-product-editorial__eyebrow-col">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="knr-product-editorial__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          <span class="knr-product-editorial__eyebrow-line" aria-hidden="true"></span>
+        {%- endif -%}
+      </div>
+
+      <div class="knr-product-editorial__quote-col">
+        {%- if section.settings.quote != blank -%}
+          <div class="knr-product-editorial__quote rte">{{ section.settings.quote }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.attribution != blank -%}
+          <p class="knr-product-editorial__attribution">{{ section.settings.attribution | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if section.settings.show_quick_add and product != blank -%}
+    {% render 'knr-editorial-quick-add',
+      product: product,
+      section: section,
+      variant: selected_variant
+    %}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "KNR Product Editorial",
+  "tag": "section",
+  "class": "knr-section-product-editorial",
+  "templates": ["product"],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Minimum section height",
+      "min": 320,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 560
+    },
+    {
+      "type": "header",
+      "content": "Mobile background focus"
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_focus_x",
+      "label": "Mobile image horizontal focus",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50,
+      "info": "Adjust if the background subject is off-center on mobile."
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_focus_y",
+      "label": "Mobile image vertical focus",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Notre engagement pour une beauté régénérée"
+    },
+    {
+      "type": "richtext",
+      "id": "quote",
+      "label": "Quote",
+      "default": "<p>Chaque formule est pensée pour respecter l'équilibre naturel de la peau, en alliant efficacité et sensorialité.</p>"
+    },
+    {
+      "type": "text",
+      "id": "attribution",
+      "label": "Attribution",
+      "default": "Sophie M."
+    },
+    {
+      "type": "header",
+      "content": "Quick add bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart label",
+      "default": "Ajouter au panier"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "Sold out"
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR Product Editorial"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,56 @@
+{% comment %}
+  Single "How to use" step card.
+
+  Accepts:
+  - step: {Metaobject} knr_how_to_use_step
+  - index: {Number} 1-based fallback for step number
+  - read_more_fallback: {String} Default read-more label
+{% endcomment %}
+{%- liquid
+  assign step_number = step.step_number.value
+  if step_number == blank
+    assign step_number = index | prepend: '0' | slice: -2, 2
+  endif
+
+  assign step_title = step.title.value
+  assign step_body = step.body.value
+  assign step_image = step.image.value
+  assign read_more_label = step.read_more_label.value | default: read_more_fallback
+  assign read_more_url = step.read_more_url.value
+-%}
+
+<article class="knr-how-to-use__step swiper-slide">
+  {%- if step_image != blank -%}
+    <div class="knr-how-to-use__step-image">
+      {{
+        step_image
+        | image_url: width: 800
+        | image_tag:
+          loading: 'lazy',
+          alt: step_title,
+          class: 'knr-how-to-use__step-img',
+          widths: '400, 600, 800'
+      }}
+    </div>
+  {%- else -%}
+    <div class="knr-how-to-use__step-image knr-how-to-use__step-image--placeholder">
+      {{ 'image' | placeholder_svg_tag: 'knr-how-to-use__step-img knr-how-to-use__step-img--placeholder' }}
+    </div>
+  {%- endif -%}
+
+  <p class="knr-how-to-use__step-number">{{ step_number | escape }}</p>
+
+  {%- if step_title != blank -%}
+    <h3 class="knr-how-to-use__step-title">{{ step_title | escape }}</h3>
+  {%- endif -%}
+
+  {%- if step_body != blank -%}
+    <div class="knr-how-to-use__step-body rte">{{ step_body | newline_to_br }}</div>
+  {%- endif -%}
+
+  {%- if read_more_url != blank -%}
+    <a class="knr-how-to-use__read-more" href="{{ read_more_url }}">
+      {{ read_more_label | escape }}
+    </a>
+  {%- endif -%}
+</article>
