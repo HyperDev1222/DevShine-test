@@ -50,13 +50,41 @@
         "secondary_width": 66,
         "media_fit": "cover",
         "zoom_label": "View image",
+        "media_next_label": "Next image",
         "media_dots_label": "Product images",
         "add_to_cart_label": "Ajouter au panier",
         "sold_out_label": "Sold out",
         "ritual_heading": "COMPLÉTEZ VOTRE RITUEL",
         "ritual_collection": "automated-collection",
         "ritual_limit": 5,
+        "ritual_prev_label": "Previous products",
+        "ritual_next_label": "Next products",
         "open_first_accordion": true
+      }
+    },
+    "knr_product_editorial_JpDGEr": {
+      "type": "knr-product-editorial",
+      "name": "KNR Product Editorial",
+      "settings": {
+        "background_image": "shopify://shop_images/ba9711f8e3188ac9a1a699bed15347ddc4f5dabe.png",
+        "overlay_opacity": 15,
+        "min_height": 720,
+        "mobile_image_focus_x": 50,
+        "mobile_image_focus_y": 40,
+        "eyebrow": "Notre engagement pour une beauté régénérée",
+        "quote": "<p>Fusionnant l'huile de rosier muscat, le rétinol végétal et l'extrait de cactus, notre sérum pénètre en profondeur pour stimuler le renouvellement cellulaire, atténuer les rides et redonner à la peau son éclat et sa fermeté naturels.</p>",
+        "attribution": "Sophie M.",
+        "show_quick_add": true,
+        "add_to_cart_label": "Ajouter au panier",
+        "sold_out_label": "Sold out"
+      }
+    },
+    "knr_how_to_use_TBaCzD": {
+      "type": "knr-how-to-use",
+      "name": "KNR How To Use",
+      "settings": {
+        "heading": "How to use",
+        "read_more_label": "Lire plus"
       }
     },
     "knr-reassurance": {
@@ -113,42 +141,26 @@
         "subheading": "See the difference for yourself"
       }
     },
+    "knr-product-editorial": {
+      "type": "knr-product-editorial",
+      "settings": {
+        "overlay_opacity": 15,
+        "min_height": 560,
+        "mobile_image_focus_x": 50,
+        "mobile_image_focus_y": 40,
+        "eyebrow": "Notre engagement pour une beauté régénérée",
+        "quote": "<p>Chaque formule est pensée pour respecter l'équilibre naturel de la peau, en alliant efficacité et sensorialité.</p>",
+        "attribution": "Sophie M.",
+        "show_quick_add": true,
+        "add_to_cart_label": "Ajouter au panier",
+        "sold_out_label": "Sold out"
+      }
+    },
     "knr-how-to-use": {
       "type": "knr-how-to-use",
-      "blocks": {
-        "step-1": {
-          "type": "step",
-          "settings": {
-            "step_number": "",
-            "title": "Cleanse",
-            "body": "<p>Start with a clean, dry surface.</p>"
-          }
-        },
-        "step-2": {
-          "type": "step",
-          "settings": {
-            "step_number": "",
-            "title": "Apply",
-            "body": "<p>Apply a small amount to the desired area.</p>"
-          }
-        },
-        "step-3": {
-          "type": "step",
-          "settings": {
-            "step_number": "",
-            "title": "Repeat",
-            "body": "<p>Use daily for best results.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "step-1",
-        "step-2",
-        "step-3"
-      ],
       "settings": {
         "heading": "How to use",
-        "subheading": "Follow these simple steps"
+        "read_more_label": "Lire plus"
       }
     },
     "knr-faq": {
@@ -216,8 +228,11 @@
     "knr-announcement-bar",
     "knr-header",
     "knr-product-main",
+    "knr_product_editorial_JpDGEr",
+    "knr_how_to_use_TBaCzD",
     "knr-reassurance",
     "knr-before-after",
+    "knr-product-editorial",
     "knr-how-to-use",
     "knr-faq",
     "knr-latest-news",

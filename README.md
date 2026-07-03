@@ -108,10 +108,12 @@ snippets/
   knr-product-media-grid.liquid # Hero + secondary media grid
   knr-product-accordions.liquid # Accordion blocks
   knr-product-ritual.liquid     # Collection upsell carousel
+  knr-how-to-use-step.liquid    # Single How to use step card
 
 assets/
   knr-*.css                    # Scoped section styles
   knr-product-gallery.js       # Media grid, lightbox, accordions
+  knr-how-to-use.js             # Mobile Swiper slider
   knr-variant-picker.js        # Variant selection + live price/media
   knr-cart.js                  # Add to cart + badge update
 ```
@@ -133,10 +135,46 @@ Create these **product** metafield definitions in **Settings → Custom data →
 | `knr.benefits` | Rich text | Bienfaits accordion |
 | `knr.key_ingredients` | Rich text | Ingrédients clés accordion |
 | `knr.skin_types` | Rich text | Adapté aux peaux accordion |
+| `knr.how_to_use_steps` | List · Metaobject · **How to use step** | Ordered steps for the How to use section |
 
 **Still from Shopify product data (not metafields):** title, variants, prices, unit price, compare-at price, media gallery.
 
-**Still from theme editor:** ritual upsell collection, layout settings, accordion heading labels, button labels.
+**Still from theme editor:** ritual upsell collection, layout settings, accordion heading labels, button labels, How to use section heading.
+
+## KNR How To Use — metaobject setup
+
+### 1. Create the metaobject definition
+
+**Settings → Custom data → Metaobjects → Add definition**
+
+| Setting | Value |
+|---------|-------|
+| **Name** | How to use step |
+| **Type** | `knr_how_to_use_step` |
+| **Storefront access** | Read |
+
+**Fields:**
+
+| Field key | Name | Type | Required |
+|-----------|------|------|----------|
+| `step_number` | Step number | Single line text | No — e.g. `01`, `02`; auto-numbered if empty |
+| `title` | Title | Single line text | Yes — e.g. `Découvrir`, `Régénérer & Lisser` |
+| `body` | Description | Multi-line text | Yes — step paragraph |
+| `image` | Image | File · Image only | Yes |
+| `read_more_label` | Read more label | Single line text | No — defaults to `Lire plus` |
+| `read_more_url` | Read more URL | URL | No — shown on **mobile only** when set |
+
+Or sync from `.shopify/metafields.json` via Shopify CLI.
+
+### 2. Create step entries
+
+**Content → Metaobjects → How to use step → Add entry**
+
+Create one entry per step (e.g. Step 01, Step 02, Step 03) with image, title, and description.
+
+### 3. Link steps to a product
+
+On the product page, set metafield **`knr.how_to_use_steps`** (List of metaobjects → How to use step). Order in the list = display order on the page.
 
 ### Media dots (below stock message)
 
@@ -148,11 +186,12 @@ One dot is rendered per visible product image for the selected variant. Clicking
 - **Strikethrough price** — `variant.compare_at_price`
 - **Cart badge** — `cart.item_count` (updates via AJAX after add to cart)
 - **Breadcrumb** — inline in product info panel (collection context + `product.title`)
-- **Tags, rating, intro, certification, stock, accordions** — `product.metafields.knr.*`
+- **Tags, rating, intro, certification, stock, accordions, how to use steps** — `product.metafields.knr.*`
 - **Media grid** — `product.media` filtered by variant; hero uses variant featured image
 - **Ritual upsell** — products from selected collection in theme editor
 - **Navigation** — Shopify menus (`link_list` settings)
-- **FAQ, reassurance, before/after, how to use** — section blocks in theme editor
+- **FAQ, reassurance, before/after** — section blocks in theme editor
+- **How to use** — product metafield `knr.how_to_use_steps` (metaobjects); section heading in theme editor
 - **Latest news** — blog articles from selected blog
 
 ## GitHub
