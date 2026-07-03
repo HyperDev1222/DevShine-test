@@ -99,36 +99,8 @@
     },
     "knr-faq": {
       "type": "knr-faq",
-      "blocks": {
-        "faq-1": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How do I use this product?",
-            "answer": "<p>Apply as directed on the packaging.</p>"
-          }
-        },
-        "faq-2": {
-          "type": "faq_item",
-          "settings": {
-            "question": "What are the ingredients?",
-            "answer": "<p>See the product description for full ingredient list.</p>"
-          }
-        },
-        "faq-3": {
-          "type": "faq_item",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>We offer 30-day returns on unopened products.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "faq-1",
-        "faq-2",
-        "faq-3"
-      ],
       "settings": {
-        "heading": "Frequently asked questions",
+        "heading": "Questions fréquentes",
         "open_first": true
       }
     },
