@@ -109,11 +109,14 @@ snippets/
   knr-product-accordions.liquid # Accordion blocks
   knr-product-ritual.liquid     # Collection upsell carousel
   knr-how-to-use-step.liquid    # Single How to use step card
+  knr-before-after-comparison.liquid # Draggable comparison slider
+  knr-testimonial-slide.liquid  # Testimonial swiper slide
 
 assets/
   knr-*.css                    # Scoped section styles
   knr-product-gallery.js       # Media grid, lightbox, accordions
   knr-how-to-use.js             # Mobile Swiper slider
+  knr-before-after.js           # Comparison slider + testimonial Swiper
   knr-variant-picker.js        # Variant selection + live price/media
   knr-cart.js                  # Add to cart + badge update
 ```
@@ -136,10 +139,12 @@ Create these **product** metafield definitions in **Settings → Custom data →
 | `knr.key_ingredients` | Rich text | Ingrédients clés accordion |
 | `knr.skin_types` | Rich text | Adapté aux peaux accordion |
 | `knr.how_to_use_steps` | List · Metaobject · **How to use step** | Ordered steps for the How to use section |
+| `knr.before_after` | Metaobject · **Before and after** | Draggable before/after comparison |
+| `knr.testimonials` | List · Metaobject · **Testimonial** | Testimonial slider entries |
 
 **Still from Shopify product data (not metafields):** title, variants, prices, unit price, compare-at price, media gallery.
 
-**Still from theme editor:** ritual upsell collection, layout settings, accordion heading labels, button labels, How to use section heading.
+**Still from theme editor:** ritual upsell collection, layout settings, accordion heading labels, button labels, How to use / Before & After section headings.
 
 ## KNR How To Use — metaobject setup
 
@@ -176,6 +181,41 @@ Create one entry per step (e.g. Step 01, Step 02, Step 03) with image, title, an
 
 On the product page, set metafield **`knr.how_to_use_steps`** (List of metaobjects → How to use step). Order in the list = display order on the page.
 
+## KNR Before & After — metaobject setup
+
+### Section settings (theme editor)
+
+- **Heading** — e.g. `Ce que disent nos clientes`
+- **Description** — intro paragraph below heading
+- **Before / After label fallbacks** — used when metaobject labels are empty
+
+### Metaobject 1: Before and after
+
+**Type:** `knr_before_after` · **Storefront access:** Read
+
+| Field key | Name | Type | Required |
+|-----------|------|------|----------|
+| `before_image` | Before image | File · Image | Yes |
+| `after_image` | After image | File · Image | Yes |
+| `before_label` | Before label | Single line text | No — default `BEFORE` |
+| `after_label` | After label | Single line text | No — default `AFTER` |
+
+**Product metafield:** `knr.before_after` (single metaobject reference)
+
+Use the **same dimensions** for both images. The section renders a draggable comparison slider.
+
+### Metaobject 2: Testimonial
+
+**Type:** `knr_testimonial` · **Storefront access:** Read
+
+| Field key | Name | Type | Required |
+|-----------|------|------|----------|
+| `rating` | Rating | Decimal | Yes — e.g. `5` for ★★★★★ |
+| `author_name` | Author name | Single line text | Yes — e.g. `Clara T.` |
+| `quote` | Quote | Multi-line text | Yes — testimonial body |
+
+**Product metafield:** `knr.testimonials` (list of metaobjects). Order = slider order. Prev/next arrows on desktop and mobile.
+
 ### Media dots (below stock message)
 
 One dot is rendered per visible product image for the selected variant. Clicking a dot sets that image as the hero and updates the secondary grid — this controls the left-hand gallery from the info panel.
@@ -186,12 +226,13 @@ One dot is rendered per visible product image for the selected variant. Clicking
 - **Strikethrough price** — `variant.compare_at_price`
 - **Cart badge** — `cart.item_count` (updates via AJAX after add to cart)
 - **Breadcrumb** — inline in product info panel (collection context + `product.title`)
-- **Tags, rating, intro, certification, stock, accordions, how to use steps** — `product.metafields.knr.*`
+- **Tags, rating, intro, certification, stock, accordions, how to use steps, before/after, testimonials** — `product.metafields.knr.*`
 - **Media grid** — `product.media` filtered by variant; hero uses variant featured image
 - **Ritual upsell** — products from selected collection in theme editor
 - **Navigation** — Shopify menus (`link_list` settings)
-- **FAQ, reassurance, before/after** — section blocks in theme editor
+- **FAQ, reassurance** — section blocks in theme editor
 - **How to use** — product metafield `knr.how_to_use_steps` (metaobjects); section heading in theme editor
+- **Before & after** — product metafields `knr.before_after` + `knr.testimonials`; heading/description in theme editor
 - **Latest news** — blog articles from selected blog
 
 ## GitHub

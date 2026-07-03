@@ -11,7 +11,10 @@
   endif
 -%}
 
-<section class="knr-how-to-use" data-section-id="{{ section.id }}" data-knr-how-to-use>
+<section
+  class="knr-how-to-use"
+  data-section-id="{{ section.id }}"
+  data-knr-how-to-use>
   <div class="knr-how-to-use__inner">
     <h2 class="knr-how-to-use__heading">{{ heading | escape }}</h2>
 
@@ -19,18 +22,21 @@
       <div
         class="knr-how-to-use__slider swiper"
         data-knr-htu-swiper
-        style="--knr-htu-columns: {{ steps.size | at_most: 3 }};"
-      >
+        style="--knr-htu-columns: {{ steps.size | at_most: 3 }};">
         <div class="swiper-wrapper knr-how-to-use__steps">
           {%- for step in steps -%}
-            {% render 'knr-how-to-use-step',
-              step: step,
-              index: forloop.index,
-              read_more_fallback: section.settings.read_more_label
+            {% render 'knr-how-to-use-step'
+              , step: step
+              , index: forloop.index
+              , read_more_fallback: section.settings.read_more_label
             %}
           {%- endfor -%}
         </div>
-        <div class="knr-how-to-use__progress" data-knr-htu-progress role="tablist" aria-label="{{ heading | escape }}">
+        <div
+          class="knr-how-to-use__progress"
+          data-knr-htu-progress
+          role="tablist"
+          aria-label="{{ heading | escape }}">
           {%- for step in steps -%}
             <button
               type="button"
@@ -39,49 +45,49 @@
               data-slide-index="{{ forloop.index0 }}"
               role="tab"
               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-              aria-label="Go to step {{ forloop.index }}"
-            ></button>
+              aria-label="Go to step {{ forloop.index }}"></button>
           {%- endfor -%}
         </div>
       </div>
     {%- elsif request.design_mode -%}
       <p class="knr-how-to-use__empty">
-        Add steps via product metafield <strong>knr.how_to_use_steps</strong> (list of
-        <em>How to use step</em> metaobjects).
+        Add steps via product metafield
+        <strong>knr.how_to_use_steps</strong>
+        (list of
+        <em>How to use step</em>
+        metaobjects).
       </p>
     {%- endif -%}
   </div>
 </section>
 
 {% schema %}
-{
-  "name": "KNR How To Use",
-  "tag": "section",
-  "class": "knr-section-how-to-use",
-  "templates": ["product"],
-  "settings": [
-    {
-      "type": "paragraph",
-      "content": "Steps come from the product metafield knr.how_to_use_steps (list of How to use step metaobjects). See README."
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "How to use"
-    },
-    {
-      "type": "text",
-      "id": "read_more_label",
-      "label": "Read more label fallback",
-      "default": "Lire plus",
-      "info": "Used when a step metaobject has no read_more_label set."
-    }
-  ],
-  "presets": [
-    {
-      "name": "KNR How To Use"
-    }
-  ]
-}
+  {
+    "name": "KNR How To Use",
+    "tag": "section",
+    "class": "knr-section-how-to-use",
+    "templates": ["product"],
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Steps come from the product metafield knr.how_to_use_steps (list of How to use step metaobjects). See README."
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "How to use"
+      }, {
+        "type": "text",
+        "id": "read_more_label",
+        "label": "Read more label fallback",
+        "default": "Lire plus",
+        "info": "Used when a step metaobject has no read_more_label set."
+      }
+    ],
+    "presets": [
+      {
+        "name": "KNR How To Use"
+      }
+    ]
+  }
 {% endschema %}

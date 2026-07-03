@@ -1,51 +1,69 @@
 {{ 'knr-before-after.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+<script src="{{ 'knr-before-after.js' | asset_url }}" defer="defer"></script>
 
-<section class="knr-before-after" data-section-id="{{ section.id }}">
+{%- liquid
+  assign comparison = product.metafields.knr.before_after.value
+  assign testimonials = product.metafields.knr.testimonials.value
+-%}
+
+<section class="knr-before-after" data-section-id="{{ section.id }}" data-knr-before-after>
   <div class="knr-before-after__inner">
     {%- if section.settings.heading != blank -%}
       <h2 class="knr-before-after__heading">{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
 
-    {%- if section.settings.subheading != blank -%}
-      <p class="knr-before-after__subheading">{{ section.settings.subheading | escape }}</p>
+    {%- if section.settings.description != blank -%}
+      <p class="knr-before-after__description">{{ section.settings.description | escape | newline_to_br }}</p>
     {%- endif -%}
 
-    {%- if section.blocks.size > 0 -%}
-      <div class="knr-before-after__grid">
-        {%- for block in section.blocks -%}
-          <article class="knr-before-after__pair" {{ block.shopify_attributes }}>
-            <div class="knr-before-after__images">
-              <figure class="knr-before-after__figure">
-                {%- if block.settings.before_image != blank -%}
-                  {{
-                    block.settings.before_image
-                    | image_url: width: 600
-                    | image_tag: loading: 'lazy', alt: block.settings.before_label, widths: '300, 400, 600'
-                  }}
-                {%- else -%}
-                  {{ 'image' | placeholder_svg_tag }}
-                {%- endif -%}
-                <figcaption class="knr-before-after__label">{{ block.settings.before_label | escape }}</figcaption>
-              </figure>
-              <figure class="knr-before-after__figure">
-                {%- if block.settings.after_image != blank -%}
-                  {{
-                    block.settings.after_image
-                    | image_url: width: 600
-                    | image_tag: loading: 'lazy', alt: block.settings.after_label, widths: '300, 400, 600'
-                  }}
-                {%- else -%}
-                  {{ 'image' | placeholder_svg_tag }}
-                {%- endif -%}
-                <figcaption class="knr-before-after__label">{{ block.settings.after_label | escape }}</figcaption>
-              </figure>
-            </div>
-            {%- if block.settings.caption != blank -%}
-              <p class="knr-before-after__caption">{{ block.settings.caption | escape }}</p>
-            {%- endif -%}
-          </article>
-        {%- endfor -%}
+    {%- if comparison != blank -%}
+      {% render 'knr-before-after-comparison',
+        comparison: comparison,
+        before_label_fallback: section.settings.before_label,
+        after_label_fallback: section.settings.after_label
+      %}
+    {%- elsif request.design_mode -%}
+      <p class="knr-before-after__empty">
+        Add a <strong>Before &amp; after</strong> metaobject via product metafield
+        <strong>knr.before_after</strong>.
+      </p>
+    {%- endif -%}
+
+    {%- if testimonials != blank and testimonials.size > 0 -%}
+      <div class="knr-ba-testimonials" data-knr-ba-testimonials>
+        <div class="swiper knr-ba-testimonials__swiper" data-knr-ba-testimonials-swiper>
+          <div class="swiper-wrapper">
+            {%- for testimonial in testimonials -%}
+              {% render 'knr-testimonial-slide', testimonial: testimonial %}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="knr-ba-testimonials__nav">
+          <button
+            type="button"
+            class="knr-ba-testimonials__nav-btn knr-ba-testimonials__nav-btn--prev"
+            data-knr-ba-testimonials-prev
+            aria-label="{{ section.settings.prev_label | escape }}"
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <button
+            type="button"
+            class="knr-ba-testimonials__nav-btn knr-ba-testimonials__nav-btn--next"
+            data-knr-ba-testimonials-next
+            aria-label="{{ section.settings.next_label | escape }}"
+          >
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
       </div>
+    {%- elsif request.design_mode and comparison != blank -%}
+      <p class="knr-before-after__empty knr-before-after__empty--testimonials">
+        Add testimonials via product metafield <strong>knr.testimonials</strong>.
+      </p>
     {%- endif -%}
   </div>
 </section>
@@ -55,68 +73,60 @@
   "name": "KNR Before After",
   "tag": "section",
   "class": "knr-section-before-after",
+  "templates": ["product"],
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "Comparison and testimonials come from product metafields knr.before_after and knr.testimonials. See README."
+    },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Before & After"
+      "default": "Ce que disent nos clientes"
     },
     {
       "type": "textarea",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "See the difference for yourself"
-    }
-  ],
-  "blocks": [
+      "id": "description",
+      "label": "Description",
+      "default": "Des transformations visibles dès 4 semaines. Nos clientes témoignent d'une peau visiblement régénérée, plus ferme et lumineuse."
+    },
     {
-      "type": "comparison_pair",
-      "name": "Comparison pair",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "before_image",
-          "label": "Before image"
-        },
-        {
-          "type": "text",
-          "id": "before_label",
-          "label": "Before label",
-          "default": "Before"
-        },
-        {
-          "type": "image_picker",
-          "id": "after_image",
-          "label": "After image"
-        },
-        {
-          "type": "text",
-          "id": "after_label",
-          "label": "After label",
-          "default": "After"
-        },
-        {
-          "type": "textarea",
-          "id": "caption",
-          "label": "Caption"
-        }
-      ]
+      "type": "header",
+      "content": "Comparison labels (fallback)"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "BEFORE"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "AFTER"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial slider"
+    },
+    {
+      "type": "text",
+      "id": "prev_label",
+      "label": "Previous testimonial label",
+      "default": "Previous testimonial"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next testimonial label",
+      "default": "Next testimonial"
     }
   ],
   "presets": [
     {
-      "name": "KNR Before After",
-      "blocks": [
-        {
-          "type": "comparison_pair",
-          "settings": {
-            "before_label": "Before",
-            "after_label": "After",
-            "caption": "Results may vary"
-          }
-        }
-      ]
+      "name": "KNR Before After"
     }
   ]
 }

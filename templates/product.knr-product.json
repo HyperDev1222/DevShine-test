@@ -62,17 +62,16 @@
         "open_first_accordion": true
       }
     },
-    "knr_product_editorial_JpDGEr": {
+    "knr-product-editorial": {
       "type": "knr-product-editorial",
-      "name": "KNR Product Editorial",
       "settings": {
         "background_image": "shopify://shop_images/ba9711f8e3188ac9a1a699bed15347ddc4f5dabe.png",
         "overlay_opacity": 15,
-        "min_height": 720,
+        "min_height": 560,
         "mobile_image_focus_x": 50,
         "mobile_image_focus_y": 40,
         "eyebrow": "Notre engagement pour une beauté régénérée",
-        "quote": "<p>Fusionnant l'huile de rosier muscat, le rétinol végétal et l'extrait de cactus, notre sérum pénètre en profondeur pour stimuler le renouvellement cellulaire, atténuer les rides et redonner à la peau son éclat et sa fermeté naturels.</p>",
+        "quote": "<p>Chaque formule est pensée pour respecter l'équilibre naturel de la peau, en alliant efficacité et sensorialité.</p>",
         "attribution": "Sophie M.",
         "show_quick_add": true,
         "add_to_cart_label": "Ajouter au panier",
@@ -87,80 +86,15 @@
         "read_more_label": "Lire plus"
       }
     },
-    "knr-reassurance": {
-      "type": "knr-reassurance",
-      "blocks": {
-        "reassurance-1": {
-          "type": "reassurance_item",
-          "settings": {
-            "title": "Free shipping",
-            "text": "On orders over $50"
-          }
-        },
-        "reassurance-2": {
-          "type": "reassurance_item",
-          "settings": {
-            "title": "Secure payment",
-            "text": "100% protected checkout"
-          }
-        },
-        "reassurance-3": {
-          "type": "reassurance_item",
-          "settings": {
-            "title": "Easy returns",
-            "text": "30-day return policy"
-          }
-        }
-      },
-      "block_order": [
-        "reassurance-1",
-        "reassurance-2",
-        "reassurance-3"
-      ],
-      "settings": {
-        "heading": "Why choose us"
-      }
-    },
     "knr-before-after": {
       "type": "knr-before-after",
-      "blocks": {
-        "comparison-1": {
-          "type": "comparison_pair",
-          "settings": {
-            "before_label": "Before",
-            "after_label": "After",
-            "caption": "Results may vary"
-          }
-        }
-      },
-      "block_order": [
-        "comparison-1"
-      ],
       "settings": {
-        "heading": "Before & After",
-        "subheading": "See the difference for yourself"
-      }
-    },
-    "knr-product-editorial": {
-      "type": "knr-product-editorial",
-      "settings": {
-        "overlay_opacity": 15,
-        "min_height": 560,
-        "mobile_image_focus_x": 50,
-        "mobile_image_focus_y": 40,
-        "eyebrow": "Notre engagement pour une beauté régénérée",
-        "quote": "<p>Chaque formule est pensée pour respecter l'équilibre naturel de la peau, en alliant efficacité et sensorialité.</p>",
-        "attribution": "Sophie M.",
-        "show_quick_add": true,
-        "add_to_cart_label": "Ajouter au panier",
-        "sold_out_label": "Sold out"
-      }
-    },
-    "knr-how-to-use": {
-      "type": "knr-how-to-use",
-      "settings": {
-        "heading": "How to use",
-        "read_more_label": "Lire plus"
+        "heading": "Ce que disent nos clientes",
+        "description": "Des transformations visibles dès 4 semaines. Nos clientes témoignent d'une peau visiblement régénérée, plus ferme et lumineuse.",
+        "before_label": "BEFORE",
+        "after_label": "AFTER",
+        "prev_label": "Previous testimonial",
+        "next_label": "Next testimonial"
       }
     },
     "knr-faq": {
@@ -228,12 +162,9 @@
     "knr-announcement-bar",
     "knr-header",
     "knr-product-main",
-    "knr_product_editorial_JpDGEr",
-    "knr_how_to_use_TBaCzD",
-    "knr-reassurance",
-    "knr-before-after",
     "knr-product-editorial",
-    "knr-how-to-use",
+    "knr_how_to_use_TBaCzD",
+    "knr-before-after",
     "knr-faq",
     "knr-latest-news",
     "knr-footer"

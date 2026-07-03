@@ -96,6 +96,22 @@
       "description": "Ordered list of How to use step metaobjects for the product page.",
       "type": "list.metaobject_reference",
       "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "before_after",
+      "name": "Before and after",
+      "description": "Before/after image comparison for the Before & After section.",
+      "type": "metaobject_reference",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "testimonials",
+      "name": "Testimonials",
+      "description": "Customer testimonials for the Before & After section slider.",
+      "type": "list.metaobject_reference",
+      "ownerType": "PRODUCT"
     }
   ],
   "metaobject_definitions": [
@@ -142,6 +158,69 @@
           "name": "Read more URL",
           "type": "url",
           "description": "Optional link shown on mobile only."
+        }
+      ]
+    },
+    {
+      "name": "Before and after",
+      "type": "knr_before_after",
+      "access": {
+        "storefront": "PUBLIC_READ"
+      },
+      "field_definitions": [
+        {
+          "key": "before_image",
+          "name": "Before image",
+          "type": "file_reference",
+          "required": true,
+          "validations": [{ "name": "file_type_options", "value": "[\"Image\"]" }]
+        },
+        {
+          "key": "after_image",
+          "name": "After image",
+          "type": "file_reference",
+          "required": true,
+          "validations": [{ "name": "file_type_options", "value": "[\"Image\"]" }]
+        },
+        {
+          "key": "before_label",
+          "name": "Before label",
+          "type": "single_line_text_field",
+          "description": "Defaults to BEFORE."
+        },
+        {
+          "key": "after_label",
+          "name": "After label",
+          "type": "single_line_text_field",
+          "description": "Defaults to AFTER."
+        }
+      ]
+    },
+    {
+      "name": "Testimonial",
+      "type": "knr_testimonial",
+      "access": {
+        "storefront": "PUBLIC_READ"
+      },
+      "field_definitions": [
+        {
+          "key": "rating",
+          "name": "Rating",
+          "type": "number_decimal",
+          "description": "Star rating e.g. 5 for five stars.",
+          "required": true
+        },
+        {
+          "key": "author_name",
+          "name": "Author name",
+          "type": "single_line_text_field",
+          "required": true
+        },
+        {
+          "key": "quote",
+          "name": "Quote",
+          "type": "multi_line_text_field",
+          "required": true
         }
       ]
     }
