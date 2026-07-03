@@ -1,0 +1,51 @@
+{% comment %}
+  Star rating from knr.rating_score and knr.rating_count metafields.
+  Desktop: stars + score, count stacked under score.
+  Mobile: stars + "4.7 - 200 avis" inline.
+{% endcomment %}
+{%- liquid
+  assign mf = product.metafields.knr
+  assign score = mf.rating_score.value
+  assign review_count = mf.rating_count.value
+-%}
+
+{%- if score != blank or review_count != blank -%}
+  <div class="knr-product-main__rating">
+    <div class="knr-product-main__rating-top">
+      {%- if score != blank -%}
+        {%- assign score_num = score | plus: 0 -%}
+        {%- assign full_stars = score_num | floor -%}
+        <span class="knr-product-main__stars" aria-hidden="true">
+          {%- for i in (1..5) -%}
+            {%- if i <= full_stars -%}
+              <span class="knr-product-main__star knr-product-main__star--full">★</span>
+            {%- else -%}
+              <span class="knr-product-main__star knr-product-main__star--empty">★</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </span>
+      {%- endif -%}
+      <div class="knr-product-main__rating-meta">
+        {%- if score != blank -%}
+          <span class="knr-product-main__rating-score knr-product-main__rating-score--desktop">{{ score | escape }}</span>
+        {%- endif -%}
+        {%- if review_count != blank -%}
+          <span class="knr-product-main__rating-count knr-product-main__rating-count--desktop">{{ review_count | escape }}</span>
+        {%- endif -%}
+        {%- if score != blank or review_count != blank -%}
+          <span class="knr-product-main__rating-inline knr-product-main__rating-inline--mobile">
+            {%- if score != blank -%}
+              <span class="knr-product-main__rating-score">{{ score | escape }}</span>
+            {%- endif -%}
+            {%- if score != blank and review_count != blank -%}
+              <span class="knr-product-main__rating-sep" aria-hidden="true">-</span>
+            {%- endif -%}
+            {%- if review_count != blank -%}
+              <span class="knr-product-main__rating-count">{{ review_count | escape }}</span>
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

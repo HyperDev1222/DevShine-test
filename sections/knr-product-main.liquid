@@ -1,132 +1,169 @@
 {{ 'knr-product-main.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+<script src="{{ 'knr-product-gallery.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'knr-product-ritual.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'knr-variant-picker.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'knr-cart.js' | asset_url }}" defer="defer"></script>
 
-{%- assign selected_variant = product.selected_or_first_available_variant -%}
-{%- assign product_form_id = 'knr-product-form-' | append: section.id -%}
+{%- liquid
+  assign selected_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'knr-product-form-' | append: section.id
+  assign mf = product.metafields.knr
+
+  assign text_above_variant = mf.text_above_variant.value
+  if text_above_variant == blank
+    assign text_above_variant = mf.intro.value
+  endif
+  assign stock_message = mf.stock_message.value
+  assign certification_html = mf.certification
+-%}
 
 <section
   class="knr-product-main"
   data-section-id="{{ section.id }}"
   data-knr-variant-picker
-  data-money-format="{{ shop.money_format | escape }}"
+  data-money-format="{% if settings.currency_code_enabled %}{{ shop.money_with_currency_format | escape }}{% else %}{{ shop.money_format | escape }}{% endif %}"
+  data-currency-code-enabled="{{ settings.currency_code_enabled }}"
+  style="--knr-info-panel-width: {{ section.settings.info_panel_width }}px; --knr-secondary-width: {{ section.settings.secondary_width }}%;"
 >
   <div class="knr-product-main__inner">
-    <div class="knr-product-main__gallery">
-      <div class="knr-product-main__main-image-wrap">
-        {%- if product.featured_media -%}
-          {{
-            product.featured_media
-            | image_url: width: 1200
-            | image_tag:
-              class: 'knr-product-main__main-image',
-              data-knr-main-image: true,
-              loading: 'eager',
-              alt: product.featured_media.alt | default: product.title,
-              widths: '400, 600, 800, 1000, 1200'
-          }}
-        {%- else -%}
-          {{ 'product-1' | placeholder_svg_tag: 'knr-product-main__placeholder' }}
-        {%- endif -%}
-      </div>
-
-      {%- if product.images.size > 1 -%}
-        <ul class="knr-product-main__thumbnails" role="list">
-          {%- for image in product.images -%}
-            <li class="knr-product-main__thumbnail-item">
-              <button
-                type="button"
-                class="knr-product-main__thumbnail{% if forloop.first %} knr-product-main__thumbnail--active{% endif %}"
-                data-knr-thumbnail
-                data-image-src="{{ image | image_url: width: 1200 }}"
-                data-image-alt="{{ image.alt | default: product.title | escape }}"
-                aria-label="{{ section.settings.thumbnail_label | escape }} {{ forloop.index }}"
-              >
-                {{
-                  image
-                  | image_url: width: 120
-                  | image_tag: loading: 'lazy', alt: image.alt | default: product.title, widths: '80, 120'
-                }}
-              </button>
-            </li>
-          {%- endfor -%}
-        </ul>
-      {%- endif -%}
+    <div class="knr-product-main__media-col">
+      {% render 'knr-product-media-grid',
+        product: product,
+        variant: selected_variant,
+        section: section,
+        media_fit: section.settings.media_fit,
+        tags: mf.tags.value
+      %}
     </div>
 
-    <div class="knr-product-main__info">
-      {%- if section.settings.show_vendor and product.vendor != blank -%}
-        <p class="knr-product-main__vendor">{{ product.vendor | escape }}</p>
-      {%- endif -%}
+    <div class="knr-product-main__info-col">
+      <div class="knr-product-main__info-panel">
+        <div class="knr-product-main__area-breadcrumb">
+          {% render 'knr-product-breadcrumb',
+            product: product,
+            collection: collection,
+            fallback_collection: section.settings.fallback_collection,
+            separator: section.settings.breadcrumb_separator
+          %}
+        </div>
 
-      <h1 class="knr-product-main__title">{{ product.title | escape }}</h1>
+        {%- if mf.tags.value != blank -%}
+          <ul class="knr-product-main__tags knr-product-main__tags--panel knr-product-main__area-tags-panel" role="list">
+            {%- for tag in mf.tags.value -%}
+              <li class="knr-product-main__tag">{{ tag | escape }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
 
-      <div class="knr-product-main__price-wrap">
-        {%- assign knr_price_id = 'knr-price-' | append: section.id -%}
-        {% render 'knr-price', variant: selected_variant, id: knr_price_id %}
-      </div>
+        <h1 class="knr-product-main__title knr-product-main__area-title">{{ product.title | escape }}</h1>
 
-      {%- unless product.has_only_default_variant -%}
-        <div class="knr-product-main__variants">
-          {%- for option in product.options_with_values -%}
-            <fieldset class="knr-product-main__option" data-knr-option-group>
-              <legend class="knr-product-main__option-label">{{ option.name | escape }}</legend>
-              <div class="knr-product-main__option-values">
-                {%- for value in option.values -%}
-                  {%- liquid
-                    assign is_selected = false
-                    if option.selected_value == value
-                      assign is_selected = true
-                    endif
-                  -%}
-                  <label class="knr-product-main__option-value{% if is_selected %} knr-product-main__option-value--selected{% endif %}">
-                    <input
-                      type="radio"
-                      name="options[{{ option.name | escape }}]"
-                      value="{{ value | escape }}"
-                      data-knr-option
-                      {% if is_selected %}checked{% endif %}
-                      class="knr-product-main__option-input visually-hidden"
-                    >
-                    <span>{{ value | escape }}</span>
-                  </label>
-                {%- endfor -%}
+        <div class="knr-product-main__rating-wrap knr-product-main__area-rating">
+          {% render 'knr-product-rating', product: product %}
+        </div>
+
+        {%- if certification_html != blank -%}
+          <div class="knr-product-main__certs rte knr-product-main__area-certs">
+            {{ certification_html | metafield_tag }}
+          </div>
+        {%- endif -%}
+
+        {%- if text_above_variant != blank -%}
+          <p class="knr-product-main__text-above-variant knr-product-main__area-intro">{{ text_above_variant | escape | newline_to_br }}</p>
+        {%- endif -%}
+
+        {%- unless product.has_only_default_variant -%}
+          <div class="knr-product-main__variants knr-product-main__area-variants">
+            {%- for option in product.options_with_values -%}
+              <div class="knr-product-main__option" data-knr-option-group>
+                <span class="knr-product-main__option-label">{{ option.name | escape }}</span>
+                <div class="knr-product-main__option-links">
+                  {%- for value in option.values -%}
+                    {%- liquid
+                      assign is_selected = false
+                      if option.selected_value == value
+                        assign is_selected = true
+                      endif
+                    -%}
+                    <label class="knr-product-main__option-link{% if is_selected %} knr-product-main__option-link--active{% endif %}">
+                      <input
+                        type="radio"
+                        name="options[{{ option.name | escape }}]"
+                        value="{{ value | escape }}"
+                        data-knr-option
+                        {% if is_selected %}checked{% endif %}
+                        class="knr-product-main__option-input visually-hidden"
+                      >
+                      <span>{{ value | escape }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
               </div>
-            </fieldset>
-          {%- endfor -%}
+            {%- endfor -%}
+          </div>
+        {%- endunless -%}
+
+        <div class="knr-product-main__price-block knr-product-main__area-price">
+          {%- assign knr_price_id = 'knr-price-' | append: section.id -%}
+          {% render 'knr-price', variant: selected_variant, id: knr_price_id %}
+          {% render 'knr-unit-price', variant: selected_variant %}
         </div>
-      {%- endunless -%}
 
-      {%- form 'product', product, id: product_form_id, class: 'knr-product-main__form', data-knr-add-to-cart-form: true -%}
-        <input
-          type="hidden"
-          name="id"
-          value="{{ selected_variant.id }}"
-          data-knr-variant-id
-          {% unless selected_variant.available %}disabled{% endunless %}
-        >
+        {%- form 'product', product, id: product_form_id, class: 'knr-product-main__form knr-product-main__area-atc', data-knr-add-to-cart-form: true -%}
+          <input
+            type="hidden"
+            name="id"
+            value="{{ selected_variant.id }}"
+            data-knr-variant-id
+            {% unless selected_variant.available %}disabled{% endunless %}
+          >
 
-        <button
-          type="submit"
-          class="knr-product-main__submit"
-          data-knr-add-to-cart
-          data-label-available="{{ section.settings.add_to_cart_label | escape }}"
-          data-label-sold-out="{{ section.settings.sold_out_label | escape }}"
-          {% unless selected_variant.available %}disabled{% endunless %}
-        >
-          {%- if selected_variant.available -%}
-            {{ section.settings.add_to_cart_label | escape }}
-          {%- else -%}
-            {{ section.settings.sold_out_label | escape }}
-          {%- endif -%}
-        </button>
-      {%- endform -%}
+          <button
+            type="submit"
+            class="knr-product-main__submit"
+            data-knr-add-to-cart
+            data-label-available="{{ section.settings.add_to_cart_label | escape }}"
+            data-label-sold-out="{{ section.settings.sold_out_label | escape }}"
+            {% unless selected_variant.available %}disabled{% endunless %}
+          >
+            {%- if selected_variant.available -%}
+              {{ section.settings.add_to_cart_label | escape }}
+            {%- else -%}
+              {{ section.settings.sold_out_label | escape }}
+            {%- endif -%}
+          </button>
+        {%- endform -%}
 
-      {%- if product.description != blank -%}
-        <div class="knr-product-main__description rte">
-          {{ product.description }}
+        {%- if stock_message != blank -%}
+          <p
+            class="knr-product-main__stock knr-product-main__area-stock"
+            data-knr-stock-message
+            data-label-available="{{ stock_message | escape }}"
+            data-label-sold-out="{{ section.settings.sold_out_label | escape }}"
+          >
+            {%- if selected_variant.available -%}
+              {{ stock_message | escape }}
+            {%- else -%}
+              {{ section.settings.sold_out_label | escape }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+
+        <div
+          class="knr-product-main__media-dots knr-product-main__area-dots"
+          data-knr-media-dots
+          role="tablist"
+          aria-label="{{ section.settings.media_dots_label | default: 'Product images' | escape }}"
+        ></div>
+
+        <div class="knr-product-main__area-accordions">
+          {% render 'knr-product-accordions', product: product, section: section %}
         </div>
-      {%- endif -%}
+        <div class="knr-product-main__area-ritual">
+          {% render 'knr-product-ritual', section: section, current_product: product %}
+        </div>
+      </div>
     </div>
   </div>
 
@@ -135,55 +172,90 @@
       "id": {{ product.id | json }},
       "title": {{ product.title | json }},
       "handle": {{ product.handle | json }},
+      "featured_media_id": {% if product.featured_media %}{{ product.featured_media.id | json }}{% else %}null{% endif %},
+      "media": [
+        {%- assign media_first = true -%}
+        {%- for media in product.media -%}
+          {%- if media.media_type != 'image' -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- liquid
+            assign media_attached = false
+            for image in product.images
+              if image.id == media.id
+                assign media_attached = image.attached_to_variant?
+                break
+              endif
+            endfor
+          -%}
+          {%- unless media_first -%},{%- endunless -%}
+          {
+            "id": {{ media.id | json }},
+            "media_type": {{ media.media_type | json }},
+            "alt": {{ media.alt | default: product.title | json }},
+            "src": {{ media | image_url: width: 1600 | json }},
+            "attached_to_variant": {{ media_attached | json }},
+            "variant_ids": [
+              {%- assign vid_first = true -%}
+              {%- for v in product.variants -%}
+                {%- if v.featured_media and v.featured_media.id == media.id -%}
+                  {%- unless vid_first -%},{%- endunless -%}
+                  {{ v.id | json }}
+                  {%- assign vid_first = false -%}
+                {%- endif -%}
+              {%- endfor -%}
+            ]
+          }
+          {%- assign media_first = false -%}
+        {%- endfor -%}
+      ],
       "variants": [
         {%- for variant in product.variants -%}
           {
             "id": {{ variant.id | json }},
             "title": {{ variant.title | json }},
             "price": {{ variant.price | json }},
+            "price_formatted": {% if settings.currency_code_enabled -%}
+              {{ variant.price | money_with_currency | json }}
+            {%- else -%}
+              {{ variant.price | money | json }}
+            {%- endif -%},
             "compare_at_price": {{ variant.compare_at_price | json }},
+            "compare_at_price_formatted": {% if variant.compare_at_price -%}
+              {%- if settings.currency_code_enabled -%}
+                {{ variant.compare_at_price | money_with_currency | json }}
+              {%- else -%}
+                {{ variant.compare_at_price | money | json }}
+              {%- endif -%}
+            {%- else -%}
+              null
+            {%- endif -%},
             "available": {{ variant.available | json }},
             "options": {{ variant.options | json }},
-            "featured_media": {% if variant.featured_media %}{
-              "id": {{ variant.featured_media.id | json }},
-              "preview_image": {
-                "src": {{ variant.featured_media | image_url: width: 1200 | json }},
-                "alt": {{ variant.featured_media.alt | default: product.title | json }}
-              }
-            }{% else %}null{% endif %}
+            "featured_media_id": {% if variant.featured_media %}{{ variant.featured_media.id | json }}{% else %}null{% endif %},
+            "unit_price_formatted": {% if variant.unit_price_measurement -%}
+              {%- capture unit_fmt -%}
+                {%- if settings.currency_code_enabled -%}
+                  {{ variant.unit_price | money_with_currency }}
+                {%- else -%}
+                  {{ variant.unit_price | money }}
+                {%- endif -%}
+                par
+                {%- if variant.unit_price_measurement.reference_value != 1 -%}
+                  {{ variant.unit_price_measurement.reference_value }}
+                {%- endif -%}
+                {{ variant.unit_price_measurement.reference_unit }}
+              {%- endcapture -%}
+              {{ unit_fmt | strip | json }}
+            {%- else -%}
+              null
+            {%- endif -%}
           }{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ]
     }
   </script>
 </section>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('[data-knr-thumbnail]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var mainImage = document.querySelector('[data-knr-main-image]');
-        if (!mainImage) return;
-        mainImage.src = btn.dataset.imageSrc;
-        if (btn.dataset.imageAlt) mainImage.alt = btn.dataset.imageAlt;
-        btn.closest('.knr-product-main__thumbnails')
-          ?.querySelectorAll('[data-knr-thumbnail]')
-          .forEach(function (t) { t.classList.remove('knr-product-main__thumbnail--active'); });
-        btn.classList.add('knr-product-main__thumbnail--active');
-      });
-    });
-
-    document.querySelectorAll('[data-knr-option]').forEach(function (input) {
-      input.addEventListener('change', function () {
-        var group = input.closest('[data-knr-option-group]');
-        group?.querySelectorAll('.knr-product-main__option-value').forEach(function (label) {
-          label.classList.remove('knr-product-main__option-value--selected');
-        });
-        input.closest('.knr-product-main__option-value')?.classList.add('knr-product-main__option-value--selected');
-      });
-    });
-  });
-</script>
 
 {% schema %}
 {
@@ -192,28 +264,141 @@
   "class": "knr-section-product-main",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "label": "Show vendor",
-      "default": false
+      "type": "paragraph",
+      "content": "Product content uses product metafields in the knr namespace. Required: knr.text_above_variant (text above variant picker), knr.tags, knr.rating_score, knr.rating_count, knr.certification, knr.stock_message, and accordion metafields. See README."
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Breadcrumb fallback collection"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_separator",
+      "label": "Breadcrumb separator",
+      "default": "/"
+    },
+    {
+      "type": "text",
+      "id": "description_heading",
+      "label": "Description accordion heading",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "benefits_heading",
+      "label": "Benefits accordion heading",
+      "default": "Bienfaits"
+    },
+    {
+      "type": "text",
+      "id": "ingredients_heading",
+      "label": "Ingredients accordion heading",
+      "default": "Ingrédients clés"
+    },
+    {
+      "type": "text",
+      "id": "skin_types_heading",
+      "label": "Skin types accordion heading",
+      "default": "Adapté aux peaux"
+    },
+    {
+      "type": "range",
+      "id": "info_panel_width",
+      "label": "Info panel width (desktop)",
+      "min": 320,
+      "max": 480,
+      "step": 10,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "secondary_width",
+      "label": "Secondary images width (desktop)",
+      "min": 40,
+      "max": 75,
+      "step": 1,
+      "unit": "%",
+      "default": 62
+    },
+    {
+      "type": "select",
+      "id": "media_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "text",
+      "id": "zoom_label",
+      "label": "Image zoom label",
+      "default": "View image"
+    },
+    {
+      "type": "text",
+      "id": "media_next_label",
+      "label": "Mobile hero next image label",
+      "default": "Next image"
+    },
+    {
+      "type": "text",
+      "id": "media_dots_label",
+      "label": "Media dots accessibility label",
+      "default": "Product images"
     },
     {
       "type": "text",
       "id": "add_to_cart_label",
-      "label": "Add to cart button label",
-      "default": "Add to cart"
+      "label": "Add to cart label",
+      "default": "Ajouter au panier"
     },
     {
       "type": "text",
       "id": "sold_out_label",
-      "label": "Sold out button label",
+      "label": "Sold out label",
       "default": "Sold out"
     },
     {
       "type": "text",
-      "id": "thumbnail_label",
-      "label": "Thumbnail accessibility label",
-      "default": "View image"
+      "id": "ritual_heading",
+      "label": "Ritual section heading",
+      "default": "COMPLÉTEZ VOTRE RITUEL"
+    },
+    {
+      "type": "collection",
+      "id": "ritual_collection",
+      "label": "Ritual collection"
+    },
+    {
+      "type": "range",
+      "id": "ritual_limit",
+      "label": "Ritual products to show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "ritual_prev_label",
+      "label": "Ritual carousel previous label",
+      "default": "Previous products"
+    },
+    {
+      "type": "text",
+      "id": "ritual_next_label",
+      "label": "Ritual carousel next label",
+      "default": "Next products"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_accordion",
+      "label": "Open first accordion by default",
+      "default": true
     }
   ],
   "presets": [

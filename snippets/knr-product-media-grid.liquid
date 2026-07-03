@@ -1,0 +1,152 @@
+{% comment %}
+  Three-part media layout:
+  1. Full-width hero (featured / variant image)
+  2. Secondary row (variant lifestyle images, not full width)
+  3. Info panel overlays both (styled in knr-product-main.css)
+
+  Accepts:
+  - product: {Object}
+  - variant: {Object} Selected variant
+  - section: {Object}
+  - media_fit: {String} cover or contain
+  - tags: {Array} Optional badge tags for mobile overlay
+{% endcomment %}
+{%- liquid
+  assign hero_media = variant.featured_media
+  if hero_media == blank
+    assign hero_media = product.featured_media
+  endif
+  assign object_fit = media_fit | default: 'cover'
+
+  assign cell2_media = nil
+  assign cell3_media = nil
+  assign secondary_index = 0
+
+  for media in product.media
+    if media.media_type != 'image'
+      continue
+    endif
+    if hero_media and media.id == hero_media.id
+      continue
+    endif
+
+    assign show_media = true
+    assign media_attached = false
+    for image in product.images
+      if image.id == media.id
+        assign media_attached = image.attached_to_variant?
+        break
+      endif
+    endfor
+
+    if media_attached
+      assign show_media = false
+      for v in product.variants
+        if v.featured_media and v.featured_media.id == media.id and v.id == variant.id
+          assign show_media = true
+        endif
+      endfor
+    endif
+
+    unless show_media
+      continue
+    endunless
+
+    if secondary_index == 0
+      assign cell2_media = media
+    elsif secondary_index == 1
+      assign cell3_media = media
+    endif
+    assign secondary_index = secondary_index | plus: 1
+  endfor
+-%}
+
+<div class="knr-product-media-grid" data-knr-media-grid data-media-fit="{{ object_fit | escape }}">
+  {%- comment -%} Part 1: full-width hero banner {%- endcomment -%}
+  <div class="knr-product-media-grid__hero" data-knr-media-slot="hero">
+    {%- if tags != blank -%}
+      <ul class="knr-product-media-grid__tags knr-product-main__tags knr-product-main__tags--overlay" role="list">
+        {%- for tag in tags -%}
+          <li class="knr-product-main__tag">{{ tag | escape }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if hero_media -%}
+      {{
+        hero_media
+        | image_url: width: 2000
+        | image_tag:
+          class: 'knr-product-media-grid__img',
+          data-knr-media-image: true,
+          loading: 'eager',
+          alt: hero_media.alt | default: product.title,
+          widths: '600, 900, 1200, 1600, 2000'
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'knr-product-media-grid__placeholder' }}
+    {%- endif -%}
+
+    <button
+      type="button"
+      class="knr-product-media-grid__nav knr-product-media-grid__nav--next"
+      data-knr-media-next
+      aria-label="{{ section.settings.media_next_label | default: 'Next image' | escape }}"
+      hidden
+    >
+      <span aria-hidden="true">›</span>
+    </button>
+  </div>
+
+  {%- comment -%} Part 2: secondary variant images (partial width) {%- endcomment -%}
+  <div class="knr-product-media-grid__secondary" data-knr-media-secondary>
+    <div
+      class="knr-product-media-grid__cell knr-product-media-grid__cell--cell2"
+      data-knr-media-slot="cell2"
+      {% unless cell2_media %}hidden{% endunless %}
+    >
+      {%- if cell2_media -%}
+        {{
+          cell2_media
+          | image_url: width: 1200
+          | image_tag:
+            class: 'knr-product-media-grid__img',
+            data-knr-media-image: true,
+            loading: 'lazy',
+            alt: cell2_media.alt | default: product.title,
+            widths: '400, 600, 800, 1000, 1200'
+        }}
+      {%- endif -%}
+      <button type="button" class="knr-product-media-grid__zoom" data-knr-media-zoom aria-label="{{ section.settings.zoom_label | default: 'View image' | escape }}">
+        <span aria-hidden="true">+</span>
+      </button>
+    </div>
+
+    <div
+      class="knr-product-media-grid__cell knr-product-media-grid__cell--cell3"
+      data-knr-media-slot="cell3"
+      {% unless cell3_media %}hidden{% endunless %}
+    >
+      {%- if cell3_media -%}
+        {{
+          cell3_media
+          | image_url: width: 1200
+          | image_tag:
+            class: 'knr-product-media-grid__img',
+            data-knr-media-image: true,
+            loading: 'lazy',
+            alt: cell3_media.alt | default: product.title,
+            widths: '400, 600, 800, 1000, 1200'
+        }}
+      {%- endif -%}
+      <button type="button" class="knr-product-media-grid__zoom" data-knr-media-zoom aria-label="{{ section.settings.zoom_label | default: 'View image' | escape }}">
+        <span aria-hidden="true">+</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="knr-product-media-lightbox" data-knr-media-lightbox hidden role="dialog" aria-modal="true" aria-label="{{ section.settings.zoom_label | default: 'View image' | escape }}">
+  <button type="button" class="knr-product-media-lightbox__close" data-knr-lightbox-close aria-label="Close">&times;</button>
+  <img class="knr-product-media-lightbox__img" data-knr-lightbox-img src="" alt="" width="1600" height="1600">
+</div>

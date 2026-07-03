@@ -1,0 +1,93 @@
+{
+  "definitions": [
+    {
+      "namespace": "knr",
+      "key": "text_above_variant",
+      "name": "Text above variant",
+      "description": "Short product text displayed above the variant picker (Taille).",
+      "type": "multi_line_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "tags",
+      "name": "Product badges",
+      "description": "Badge labels shown above the product title (e.g. UNIFIE, PROTÈGE).",
+      "type": "list.single_line_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "rating_score",
+      "name": "Rating score",
+      "description": "Numeric product rating (e.g. 4.7).",
+      "type": "number_decimal",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "rating_count",
+      "name": "Rating count label",
+      "description": "Review count text (e.g. 200 avis).",
+      "type": "single_line_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "certification",
+      "name": "Certification line",
+      "description": "Yuka / INCI certification text below the title.",
+      "type": "rich_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "stock_message",
+      "name": "Stock message",
+      "description": "Delivery/stock text below the Add to cart button.",
+      "type": "single_line_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "description",
+      "name": "Description accordion",
+      "description": "Rich text for the Description accordion. Falls back to native product description if empty.",
+      "type": "rich_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "description_image",
+      "name": "Description image",
+      "description": "Optional image shown inside the Description accordion.",
+      "type": "file_reference",
+      "ownerType": "PRODUCT",
+      "validations": [{ "name": "file_type_options", "value": "[\"Image\"]" }]
+    },
+    {
+      "namespace": "knr",
+      "key": "benefits",
+      "name": "Benefits accordion",
+      "description": "Rich text for the Bienfaits accordion.",
+      "type": "rich_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "key_ingredients",
+      "name": "Key ingredients accordion",
+      "description": "Rich text for the Ingrédients clés accordion.",
+      "type": "rich_text_field",
+      "ownerType": "PRODUCT"
+    },
+    {
+      "namespace": "knr",
+      "key": "skin_types",
+      "name": "Skin types accordion",
+      "description": "Rich text for the Adapté aux peaux accordion.",
+      "type": "rich_text_field",
+      "ownerType": "PRODUCT"
+    }
+  ]
+}

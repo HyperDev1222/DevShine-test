@@ -79,6 +79,10 @@
   gap: 32px;
 }
 
+.knr-header__menu-item {
+  line-height: 1;
+}
+
 .knr-header[data-section-id] .knr-header__menu-link {
   color: var(--knr-header-text, #ffffff);
   text-decoration: none;

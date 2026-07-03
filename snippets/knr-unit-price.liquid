@@ -1,0 +1,23 @@
+{% comment %}
+  KNR scoped unit price display.
+
+  Accepts:
+  - variant: {Object} Variant with unit_price_measurement
+{% endcomment %}
+{%- if variant.unit_price_measurement -%}
+  <p class="knr-unit-price" data-knr-unit-price>
+    {%- if settings.currency_code_enabled -%}
+      {%- assign unit_price = variant.unit_price | money_with_currency -%}
+    {%- else -%}
+      {%- assign unit_price = variant.unit_price | money -%}
+    {%- endif -%}
+    {{ unit_price }}
+    par
+    {%- if variant.unit_price_measurement.reference_value != 1 -%}
+      {{ variant.unit_price_measurement.reference_value }}
+    {%- endif -%}
+    {{ variant.unit_price_measurement.reference_unit }}
+  </p>
+{%- else -%}
+  <p class="knr-unit-price knr-unit-price--empty" data-knr-unit-price hidden></p>
+{%- endif -%}

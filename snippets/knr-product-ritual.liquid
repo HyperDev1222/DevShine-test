@@ -1,0 +1,73 @@
+{% comment %}
+  Ritual upsell carousel (Swiper) from collection picker.
+
+  Accepts:
+  - section: {Object}
+  - current_product: {Object}
+{% endcomment %}
+{%- if section.settings.ritual_collection != blank and section.settings.ritual_collection.products_count > 0 -%}
+  {%- assign ritual_slides = 0 -%}
+  {%- capture ritual_slides_html -%}
+    {%- for ritual_product in section.settings.ritual_collection.products limit: section.settings.ritual_limit -%}
+      {%- if ritual_product.id == current_product.id -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- assign ritual_slides = ritual_slides | plus: 1 -%}
+      <div class="swiper-slide knr-product-ritual__slide">
+        <a href="{{ ritual_product.url }}" class="knr-product-ritual__card">
+          <div class="knr-product-ritual__image-wrap">
+            {%- if ritual_product.featured_media -%}
+              {{
+                ritual_product.featured_media
+                | image_url: width: 400
+                | image_tag: loading: 'lazy', alt: ritual_product.title, widths: '200, 300, 400'
+              }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag }}
+            {%- endif -%}
+            <span class="knr-product-ritual__plus" aria-hidden="true">+</span>
+          </div>
+          <div class="knr-product-ritual__meta">
+            <p class="knr-product-ritual__name">{{ ritual_product.title | escape }}</p>
+            <p class="knr-product-ritual__price">{{ ritual_product.price | money }}</p>
+          </div>
+        </a>
+      </div>
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if ritual_slides > 0 -%}
+    <div class="knr-product-ritual" data-knr-product-ritual>
+      <div class="knr-product-ritual__header">
+        {%- if section.settings.ritual_heading != blank -%}
+          <h2 class="knr-product-ritual__heading">{{ section.settings.ritual_heading | escape }}</h2>
+        {%- endif -%}
+        <div class="knr-product-ritual__nav">
+          <button
+            type="button"
+            class="knr-product-ritual__nav-btn knr-product-ritual__nav-btn--prev"
+            data-knr-ritual-prev
+            aria-label="{{ section.settings.ritual_prev_label | default: 'Previous products' | escape }}"
+            hidden
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <button
+            type="button"
+            class="knr-product-ritual__nav-btn knr-product-ritual__nav-btn--next"
+            data-knr-ritual-next
+            aria-label="{{ section.settings.ritual_next_label | default: 'Next products' | escape }}"
+          >
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="swiper knr-product-ritual__swiper">
+        <div class="swiper-wrapper">
+          {{ ritual_slides_html }}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}

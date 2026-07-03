@@ -37,22 +37,26 @@
         "mobile_menu_label": "Open menu"
       }
     },
-    "knr-breadcrumb": {
-      "type": "knr-breadcrumb",
-      "settings": {
-        "aria_label": "Breadcrumb",
-        "home_label": "Home",
-        "separator": "/",
-        "fallback_collection": ""
-      }
-    },
     "knr-product-main": {
       "type": "knr-product-main",
       "settings": {
-        "show_vendor": false,
-        "add_to_cart_label": "Add to cart",
+        "fallback_collection": "",
+        "breadcrumb_separator": "/",
+        "description_heading": "Description",
+        "benefits_heading": "Bienfaits",
+        "ingredients_heading": "Ingrédients clés",
+        "skin_types_heading": "Adapté aux peaux",
+        "info_panel_width": 460,
+        "secondary_width": 66,
+        "media_fit": "cover",
+        "zoom_label": "View image",
+        "media_dots_label": "Product images",
+        "add_to_cart_label": "Ajouter au panier",
         "sold_out_label": "Sold out",
-        "thumbnail_label": "View image"
+        "ritual_heading": "COMPLÉTEZ VOTRE RITUEL",
+        "ritual_collection": "automated-collection",
+        "ritual_limit": 5,
+        "open_first_accordion": true
       }
     },
     "knr-reassurance": {
@@ -211,7 +215,6 @@
   "order": [
     "knr-announcement-bar",
     "knr-header",
-    "knr-breadcrumb",
     "knr-product-main",
     "knr-reassurance",
     "knr-before-after",

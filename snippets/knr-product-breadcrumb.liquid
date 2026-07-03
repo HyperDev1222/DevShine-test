@@ -1,0 +1,28 @@
+{% comment %}
+  Inline breadcrumb for KNR product info panel (Figma style).
+
+  Accepts:
+  - product: {Object} Product
+  - collection: {Object} Optional collection context
+  - fallback_collection: {Object} Optional fallback from section settings
+  - separator: {String} Separator character
+{% endcomment %}
+{%- liquid
+  assign breadcrumb_collection = collection
+  if breadcrumb_collection == blank and fallback_collection != blank
+    assign breadcrumb_collection = fallback_collection
+  endif
+  if breadcrumb_collection == blank and product.collections.size > 0
+    assign breadcrumb_collection = product.collections.first
+  endif
+-%}
+
+{%- if breadcrumb_collection != blank -%}
+  <nav class="knr-product-breadcrumb" aria-label="Breadcrumb">
+    <a href="{{ breadcrumb_collection.url }}" class="knr-product-breadcrumb__link">{{ breadcrumb_collection.title | escape }}</a>
+    {%- if separator != blank -%}
+      <span class="knr-product-breadcrumb__sep" aria-hidden="true">{{ separator | escape }}</span>
+    {%- endif -%}
+    <span class="knr-product-breadcrumb__current">{{ product.title | escape }}</span>
+  </nav>
+{%- endif -%}
