@@ -1,10 +1,10 @@
-{% comment %}
+{% comment %} 
   Floating quick-add bar for KNR product editorial section.
-
-  Accepts:
-  - product: {Object} Product (required)
-  - section: {Object} Section for labels
-  - variant: {Object} Selected variant
+ 
+  Accepts: 
+  - product: {Object} Product (required) 
+  - section: {Object} Section for labels 
+  - variant: {Object} Selected variant 
 {% endcomment %}
 {%- liquid
   if variant == blank and product != blank
@@ -18,19 +18,17 @@
 <div
   class="knr-editorial-quick-add"
   data-knr-editorial-quick-add
-  data-section-id="{{ section.id }}"
->
+  data-section-id="{{ section.id }}">
   <div class="knr-editorial-quick-add__media">
     {%- if featured_image -%}
-      {{
-        featured_image
-        | image_url: width: 160
-        | image_tag:
-          loading: 'lazy',
-          class: 'knr-editorial-quick-add__img',
-          data-knr-editorial-image: true,
-          alt: product.title,
-          widths: '80, 120, 160'
+      {{ featured_image
+ | image_url: width: 160
+ | image_tag:
+ loading: 'lazy',
+ class: 'knr-editorial-quick-add__img',
+ data-knr-editorial-image: true,
+ alt: product.title,
+ widths: '80, 120, 160'
       }}
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag: 'knr-editorial-quick-add__img knr-editorial-quick-add__img--placeholder' }}
@@ -56,8 +54,7 @@
               data-knr-editorial-option
               data-option-index="{{ forloop.parentloop.index0 }}"
               data-value="{{ value | escape }}"
-              aria-pressed="{{ is_selected }}"
-            >
+              aria-pressed="{{ is_selected }}">
               {{ value | escape }}
             </button>
           {%- endfor -%}
@@ -67,18 +64,25 @@
 
     <div class="knr-editorial-quick-add__price-wrap">
       {%- assign editorial_price_id = 'knr-editorial-price-' | append: section.id -%}
-      {% render 'knr-price', variant: variant, id: editorial_price_id, price_class: 'knr-editorial-quick-add__price' %}
+      {% render 'knr-price'
+        , variant: variant
+        , id: editorial_price_id
+        , price_class: 'knr-editorial-quick-add__price' %}
     </div>
   </div>
 
-  {%- form 'product', product, id: form_id, class: 'knr-editorial-quick-add__form', data-knr-add-to-cart-form: true -%}
+  {%- form 'product'
+    , product
+    , id: form_id
+    , class: 'knr-editorial-quick-add__form'
+    , data-knr-add-to-cart-form: true -%}
     <input
       type="hidden"
       name="id"
       value="{{ variant.id }}"
       data-knr-editorial-variant-id
-      {% unless variant.available %}disabled{% endunless %}
-    >
+      {% unless variant.available %}
+      disabled{% endunless %}>
 
     <button
       type="submit"
@@ -87,8 +91,8 @@
       data-knr-editorial-submit
       data-label-available="{{ section.settings.add_to_cart_label | escape }}"
       data-label-sold-out="{{ section.settings.sold_out_label | escape }}"
-      {% unless variant.available %}disabled{% endunless %}
-    >
+      {% unless variant.available %}
+      disabled{% endunless %}>
       {%- if variant.available -%}
         {{ section.settings.add_to_cart_label | escape }}
       {%- else -%}
