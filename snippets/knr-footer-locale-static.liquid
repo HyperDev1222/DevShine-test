@@ -1,0 +1,14 @@
+{% comment %}
+  Static footer locale label (no dropdown).
+
+  Accepts:
+  - label: {String}
+{% endcomment %}
+<div class="knr-footer__locale knr-footer__locale--static">
+  <span class="knr-footer__locale-display">
+    <span class="knr-footer__locale-label">{{ label }}</span>
+    <span class="knr-footer__locale-caret" aria-hidden="true">
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </span>
+  </span>
+</div>

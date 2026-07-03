@@ -1,0 +1,38 @@
+{% comment %}
+  Footer menu column with mobile accordion.
+
+  Accepts:
+  - heading: {String}
+  - menu: {Linklist}
+  - section_id: {String}
+  - index: {Number}
+{% endcomment %}
+{%- if menu != blank and menu.links.size > 0 -%}
+  {%- assign panel_id = 'knr-footer-menu-panel-' | append: section_id | append: '-' | append: index -%}
+  <div class="knr-footer__menu-col" data-knr-footer-menu>
+    <button
+      type="button"
+      class="knr-footer__menu-toggle"
+      data-knr-footer-toggle
+      aria-expanded="false"
+      aria-controls="{{ panel_id }}"
+    >
+      <span class="knr-footer__menu-heading">{{ heading | default: menu.title | escape }}</span>
+      <span class="knr-footer__menu-chevron" aria-hidden="true">
+        {{- 'icon-caret.svg' | inline_asset_content -}}
+      </span>
+    </button>
+
+    <div id="{{ panel_id }}" class="knr-footer__menu-panel" data-knr-footer-panel hidden>
+      <nav aria-label="{{ heading | default: menu.title | escape }}">
+        <ul class="knr-footer__menu-list" role="list">
+          {%- for link in menu.links -%}
+            <li>
+              <a href="{{ link.url }}" class="knr-footer__menu-link">{{ link.title | escape }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    </div>
+  </div>
+{%- endif -%}

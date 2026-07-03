@@ -1,58 +1,142 @@
 {{ 'knr-footer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'knr-footer.js' | asset_url }}" defer="defer"></script>
 
-<footer class="knr-footer" data-section-id="{{ section.id }}" role="contentinfo">
-  <div class="knr-footer__inner">
-    <div class="knr-footer__top">
-      <div class="knr-footer__brand">
-        {%- if section.settings.logo != blank -%}
-          {{
-            section.settings.logo
-            | image_url: width: 160
-            | image_tag: class: 'knr-footer__logo', alt: shop.name, widths: '80, 120, 160'
-          }}
-        {%- else -%}
-          <span class="knr-footer__logo-text">{{ shop.name }}</span>
+{%- liquid
+  assign current_year = 'now' | date: '%Y'
+  assign copyright_text = section.settings.copyright_text
+  assign copyright_text = copyright_text | replace: '[shop_name]', shop.name
+  assign copyright_text = copyright_text | replace: '[year]', current_year
+-%}
+
+<footer
+  class="knr-footer"
+  data-section-id="{{ section.id }}"
+  data-knr-footer
+  role="contentinfo"
+  style="--knr-footer-bg: {{ section.settings.background_color }};"
+>
+  <div class="knr-footer__body">
+    <div class="knr-footer__inner">
+      <div class="knr-footer__nav-row">
+      {% render 'knr-footer-menu',
+        heading: section.settings.menu_1_heading,
+        menu: section.settings.menu_1,
+        section_id: section.id,
+        index: 1
+      %}
+      {% render 'knr-footer-menu',
+        heading: section.settings.menu_2_heading,
+        menu: section.settings.menu_2,
+        section_id: section.id,
+        index: 2
+      %}
+      {% render 'knr-footer-menu',
+        heading: section.settings.menu_3_heading,
+        menu: section.settings.menu_3,
+        section_id: section.id,
+        index: 3
+      %}
+
+      <div class="knr-footer__about">
+        {%- if section.settings.about_heading != blank -%}
+          <p class="knr-footer__about-heading">{{ section.settings.about_heading | escape }}</p>
         {%- endif -%}
-        {%- if section.settings.tagline != blank -%}
-          <p class="knr-footer__tagline">{{ section.settings.tagline | escape }}</p>
+
+        {%- if section.settings.about_text != blank -%}
+          <div class="knr-footer__about-text rte">{{ section.settings.about_text }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.certification_image != blank or section.settings.certification_caption != blank -%}
+          <div class="knr-footer__cert">
+            {%- if section.settings.certification_image != blank -%}
+              {{
+                section.settings.certification_image
+                | image_url: width: 160
+                | image_tag:
+                  class: 'knr-footer__cert-image',
+                  loading: 'lazy',
+                  widths: '80, 120, 160',
+                  alt: section.settings.certification_image.alt | default: section.settings.certification_caption | escape
+              }}
+            {%- endif -%}
+            {%- if section.settings.certification_caption != blank -%}
+              <p class="knr-footer__cert-caption">{{ section.settings.certification_caption | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.certificate_link_label != blank and section.settings.certificate_link_url != blank -%}
+          <a href="{{ section.settings.certificate_link_url }}" class="knr-footer__cert-link">
+            {{ section.settings.certificate_link_label | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+      </div>
+
+      {%- if section.settings.footer_logo != blank -%}
+        <div class="knr-footer__brand-row">
+          {{
+            section.settings.footer_logo
+            | image_url: width: 2800
+            | image_tag:
+              class: 'knr-footer__brand-logo',
+              loading: 'lazy',
+              sizes: '100vw',
+              widths: '800, 1200, 1600, 2000, 2800',
+              alt: section.settings.footer_logo.alt | default: shop.name | escape
+          }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="knr-footer__utility">
+    <div class="knr-footer__utility-inner">
+      <div
+        class="knr-footer__localization"
+        data-knr-countries="{{ localization.available_countries.size }}"
+        data-knr-languages="{{ localization.available_languages.size }}"
+        data-knr-country="{{ localization.country.iso_code }}"
+        data-knr-language="{{ localization.language.iso_code }}"
+      >
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 0 -%}
+          {%- capture country_label -%}
+            {{- localization.country.name }} ({{ localization.country.currency.symbol }})
+          {%- endcapture -%}
+          {%- if localization.available_countries.size > 1 -%}
+            <localization-form>
+              {%- form 'localization', id: 'KnrFooterCountryForm', class: 'knr-footer__localization-form localization-form' -%}
+                <h2 class="visually-hidden" id="KnrFooterCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                {%- render 'knr-footer-country-localization', localPosition: 'KnrFooterCountry' -%}
+              {%- endform -%}
+            </localization-form>
+          {%- else -%}
+            {% render 'knr-footer-locale-static', label: country_label %}
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 0 -%}
+          {%- if localization.available_languages.size > 1 -%}
+            <localization-form>
+              {%- form 'localization', id: 'KnrFooterLanguageForm', class: 'knr-footer__localization-form localization-form' -%}
+                <h2 class="visually-hidden" id="KnrFooterLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                {%- render 'knr-footer-language-localization', localPosition: 'KnrFooterLanguage' -%}
+              {%- endform -%}
+            </localization-form>
+          {%- else -%}
+            {% render 'knr-footer-locale-static', label: localization.language.endonym_name %}
+          {%- endif -%}
         {%- endif -%}
       </div>
 
-      {%- if section.settings.menu != blank -%}
-        <nav class="knr-footer__nav" aria-label="{{ section.settings.menu.title | escape }}">
-          <ul class="knr-footer__menu">
-            {%- for link in section.settings.menu.links -%}
-              <li>
-                <a href="{{ link.url }}" class="knr-footer__link">{{ link.title | escape }}</a>
-              </li>
-            {%- endfor -%}
-          </ul>
-        </nav>
+      {%- if copyright_text != blank -%}
+        <p class="knr-footer__copyright">{{ copyright_text | escape }}</p>
       {%- endif -%}
 
-      {%- if section.settings.secondary_menu != blank -%}
-        <nav class="knr-footer__nav" aria-label="{{ section.settings.secondary_menu.title | escape }}">
-          <ul class="knr-footer__menu">
-            {%- for link in section.settings.secondary_menu.links -%}
-              <li>
-                <a href="{{ link.url }}" class="knr-footer__link">{{ link.title | escape }}</a>
-              </li>
-            {%- endfor -%}
-          </ul>
-        </nav>
-      {%- endif -%}
-    </div>
-
-    <div class="knr-footer__bottom">
-      <p class="knr-footer__copyright">
-        {{ section.settings.copyright_text | replace: '[shop_name]', shop.name | escape }}
-      </p>
-
-      {%- if section.settings.show_payment_icons -%}
-        <div class="knr-footer__payment">
-          {%- for type in shop.enabled_payment_types -%}
-            {{ type | payment_type_svg_tag: class: 'knr-footer__payment-icon' }}
-          {%- endfor -%}
+      {%- if section.settings.show_social -%}
+        <div class="knr-footer__social">
+          {% render 'knr-footer-social', linkedin_url: section.settings.social_linkedin_url %}
         </div>
       {%- endif -%}
     </div>
@@ -66,38 +150,138 @@
   "class": "knr-section-footer",
   "settings": [
     {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F9F6F1"
+    },
+    {
+      "type": "header",
+      "content": "Navigation menus"
+    },
+    {
+      "type": "paragraph",
+      "content": "Assign three menus in Online Store → Navigation. On mobile, each menu collapses into an accordion."
+    },
+    {
+      "type": "text",
+      "id": "menu_1_heading",
+      "label": "Menu 1 heading",
+      "default": "Découvrir"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Menu 1"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_heading",
+      "label": "Menu 2 heading",
+      "default": "Service client"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Menu 2"
+    },
+    {
+      "type": "text",
+      "id": "menu_3_heading",
+      "label": "Menu 3 heading",
+      "default": "Légal & Transparence"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_3",
+      "label": "Menu 3"
+    },
+    {
+      "type": "header",
+      "content": "About & certification"
+    },
+    {
+      "type": "text",
+      "id": "about_heading",
+      "label": "About heading",
+      "default": "À propos de Maison Célestine"
+    },
+    {
+      "type": "richtext",
+      "id": "about_text",
+      "label": "About text",
+      "default": "<p>Maison Célestine conçoit une gamme de soins anti-âge haut de gamme, formulée avec des actifs rares certifiés biologiques.</p>"
+    },
+    {
       "type": "image_picker",
-      "id": "logo",
-      "label": "Logo"
+      "id": "certification_image",
+      "label": "Certification logo"
     },
     {
-      "type": "textarea",
-      "id": "tagline",
-      "label": "Tagline"
+      "type": "text",
+      "id": "certification_caption",
+      "label": "Certification caption",
+      "default": "Certifié COSMOS ORGANIC par ECOCERT Greenlife."
     },
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Primary menu",
-      "default": "footer"
+      "type": "text",
+      "id": "certificate_link_label",
+      "label": "Certificate link label",
+      "default": "Voir le certificat"
     },
     {
-      "type": "link_list",
-      "id": "secondary_menu",
-      "label": "Secondary menu"
+      "type": "url",
+      "id": "certificate_link_url",
+      "label": "Certificate link URL"
+    },
+    {
+      "type": "header",
+      "content": "Footer logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer logo",
+      "info": "Large wordmark displayed between the navigation and utility bar. Use a separate asset from the header logo."
+    },
+    {
+      "type": "header",
+      "content": "Utility bar"
     },
     {
       "type": "text",
       "id": "copyright_text",
       "label": "Copyright text",
-      "default": "© [shop_name]. All rights reserved.",
-      "info": "Use [shop_name] for the store name"
+      "default": "© [year] Maison Célestine. Tous droits réservés.",
+      "info": "Use [year] for the current year and [shop_name] for the store name."
     },
     {
       "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "Show payment icons",
+      "id": "enable_country_selector",
+      "label": "Show country/region selector",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "label": "Show language selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social icons",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "social_linkedin_url",
+      "label": "LinkedIn URL",
+      "info": "Facebook, Instagram, and TikTok use Theme settings → Social media."
     }
   ],
   "presets": [
