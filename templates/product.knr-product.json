@@ -117,6 +117,60 @@
         "no_articles_message": "No articles published yet."
       }
     },
+    "knr-email-signup": {
+      "type": "knr-email-signup",
+      "settings": {
+        "desktop_heading": "L'alliance de la science botanique et du luxe naturel pour une peau visiblement rajeunie en 4 semaines.",
+        "mobile_heading": "Sérum précieux régénérant — l'alliance de la science botanique et du luxe naturel pour une peau visiblement rajeunie en 4 semaines.",
+        "email_placeholder": "E-mail",
+        "submit_label": "S'inscrire",
+        "success_message": "Merci pour votre inscription.",
+        "disclaimer": "Formule brevetée, testée dermatologiquement, 97 % d'ingrédients d'origine naturelle."
+      }
+    },
+    "knr-reassurance": {
+      "type": "knr-reassurance",
+      "blocks": {
+        "reassurance_livraison": {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "LIVRAISON OFFERTE",
+            "text": "<p>Livraison offerte<br/>dès 60 € d'achat<br/>en France métropolitaine.</p>"
+          }
+        },
+        "reassurance_retours": {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "RETOURS GRATUITS",
+            "text": "<p>Retours acceptés<br/>jusqu'à 30 jours<br/>après réception.</p>"
+          }
+        },
+        "reassurance_paiement": {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "PAIEMENT SÉCURISÉ",
+            "text": "<p>Paiement 100 % sécurisé<br/>par carte bancaire,<br/>PayPal ou virement.</p>"
+          }
+        },
+        "reassurance_service": {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "SERVICE CLIENT",
+            "text": "<p>Du lundi au vendredi<br/>de 9h à 18h par email<br/>et téléphone.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "reassurance_livraison",
+        "reassurance_retours",
+        "reassurance_paiement",
+        "reassurance_service"
+      ],
+      "settings": {
+        "background_color": "#e5e0d5",
+        "progress_label": "Reassurance items"
+      }
+    },
     "knr-footer": {
       "type": "knr-footer",
       "settings": {
@@ -137,6 +191,8 @@
     "knr-before-after",
     "knr-faq",
     "knr-latest-news",
+    "knr-email-signup",
+    "knr-reassurance",
     "knr-footer"
   ]
 }

@@ -110,6 +110,7 @@
   font-weight: 400;
   line-height: 22px;
   color: #1a1a1a;
+  letter-spacing: -2%;
 }
 
 .knr-latest-news[data-section-id] .knr-latest-news__progress {

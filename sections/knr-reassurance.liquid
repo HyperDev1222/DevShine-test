@@ -1,33 +1,49 @@
 {{ 'knr-reassurance.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+<script src="{{ 'knr-reassurance.js' | asset_url }}" defer="defer"></script>
 
-<section class="knr-reassurance" data-section-id="{{ section.id }}">
+<section
+  class="knr-reassurance"
+  data-section-id="{{ section.id }}"
+  data-knr-reassurance
+  style="--knr-reassurance-bg: {{ section.settings.background_color }}; --knr-reassurance-columns: {{ section.blocks.size | at_least: 1 }};"
+>
   <div class="knr-reassurance__inner">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="knr-reassurance__heading">{{ section.settings.heading | escape }}</h2>
-    {%- endif -%}
-
     {%- if section.blocks.size > 0 -%}
-      <ul class="knr-reassurance__grid" role="list">
-        {%- for block in section.blocks -%}
-          <li class="knr-reassurance__item" {{ block.shopify_attributes }}>
-            {%- if block.settings.icon != blank -%}
-              <div class="knr-reassurance__icon">
-                {{
-                  block.settings.icon
-                  | image_url: width: 80
-                  | image_tag: loading: 'lazy', alt: block.settings.title, widths: '40, 60, 80'
-                }}
-              </div>
-            {%- endif -%}
-            {%- if block.settings.title != blank -%}
-              <h3 class="knr-reassurance__title">{{ block.settings.title | escape }}</h3>
-            {%- endif -%}
-            {%- if block.settings.text != blank -%}
-              <p class="knr-reassurance__text">{{ block.settings.text | escape }}</p>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
-      </ul>
+      <div class="knr-reassurance__slider swiper" data-knr-reassurance-swiper>
+        <div class="swiper-wrapper knr-reassurance__grid">
+          {%- for block in section.blocks -%}
+            <div class="knr-reassurance__item swiper-slide" {{ block.shopify_attributes }}>
+              {%- if block.settings.title != blank -%}
+                <p class="knr-reassurance__title">{{ block.settings.title | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="knr-reassurance__text rte">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div
+          class="knr-reassurance__progress"
+          data-knr-reassurance-progress
+          role="tablist"
+          aria-label="{{ section.settings.progress_label | escape }}"
+        >
+          {%- for block in section.blocks -%}
+            <button
+              type="button"
+              class="knr-reassurance__progress-segment{% if forloop.first %} is-active{% endif %}"
+              data-knr-reassurance-progress-segment
+              data-slide-index="{{ forloop.index0 }}"
+              role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-label="{{ block.settings.title | default: 'Item' | escape }} {{ forloop.index }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      </div>
     {%- endif -%}
   </div>
 </section>
@@ -39,10 +55,17 @@
   "class": "knr-section-reassurance",
   "settings": [
     {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#E5E0D5"
+    },
+    {
       "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Why choose us"
+      "id": "progress_label",
+      "label": "Progress bar label",
+      "default": "Reassurance items",
+      "info": "Screen reader label for the mobile slider progress bar."
     }
   ],
   "blocks": [
@@ -51,21 +74,16 @@
       "name": "Reassurance item",
       "settings": [
         {
-          "type": "image_picker",
-          "id": "icon",
-          "label": "Icon"
-        },
-        {
           "type": "text",
           "id": "title",
           "label": "Title",
-          "default": "Free shipping"
+          "default": "LIVRAISON OFFERTE"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
           "id": "text",
           "label": "Text",
-          "default": "On orders over $50"
+          "default": "<p>Livraison offerte dès 60 € d'achat en France métropolitaine.</p>"
         }
       ]
     }
@@ -77,22 +95,29 @@
         {
           "type": "reassurance_item",
           "settings": {
-            "title": "Free shipping",
-            "text": "On orders over $50"
+            "title": "LIVRAISON OFFERTE",
+            "text": "<p>Livraison offerte dès 60 € d'achat en France métropolitaine.</p>"
           }
         },
         {
           "type": "reassurance_item",
           "settings": {
-            "title": "Secure payment",
-            "text": "100% protected checkout"
+            "title": "RETOURS GRATUITS",
+            "text": "<p>Retours acceptés jusqu'à 30 jours après réception.</p>"
           }
         },
         {
           "type": "reassurance_item",
           "settings": {
-            "title": "Easy returns",
-            "text": "30-day return policy"
+            "title": "PAIEMENT SÉCURISÉ",
+            "text": "<p>Paiement 100 % sécurisé par carte bancaire, PayPal ou virement.</p>"
+          }
+        },
+        {
+          "type": "reassurance_item",
+          "settings": {
+            "title": "SERVICE CLIENT",
+            "text": "<p>Du lundi au vendredi de 9h à 18h par email et téléphone.</p>"
           }
         }
       ]
