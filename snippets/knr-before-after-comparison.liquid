@@ -1,0 +1,62 @@
+{% comment %}
+  Draggable before/after image comparison.
+
+  Accepts:
+  - comparison: {Metaobject} knr_before_after
+  - before_label_fallback: {String}
+  - after_label_fallback: {String}
+{% endcomment %}
+{%- liquid
+  assign before_image = comparison.before_image.value
+  assign after_image = comparison.after_image.value
+  assign before_label = comparison.before_label.value | default: before_label_fallback
+  assign after_label = comparison.after_label.value | default: after_label_fallback
+-%}
+
+{%- if before_image != blank and after_image != blank -%}
+  <div class="knr-ba-comparison" data-knr-ba-comparison style="--knr-ba-position: 50%;">
+    <div class="knr-ba-comparison__stage">
+      {{
+        after_image
+        | image_url: width: 1600
+        | image_tag:
+          loading: 'lazy',
+          class: 'knr-ba-comparison__img knr-ba-comparison__img--after',
+          alt: after_label,
+          widths: '600, 900, 1200, 1600'
+      }}
+
+      <span class="knr-ba-comparison__label knr-ba-comparison__label--after">{{ after_label | escape }}</span>
+
+      <div class="knr-ba-comparison__before" data-knr-ba-before>
+        {{
+          before_image
+          | image_url: width: 1600
+          | image_tag:
+            loading: 'lazy',
+            class: 'knr-ba-comparison__img knr-ba-comparison__img--before',
+            alt: before_label,
+            widths: '600, 900, 1200, 1600'
+        }}
+        <span class="knr-ba-comparison__label knr-ba-comparison__label--before">{{ before_label | escape }}</span>
+      </div>
+
+      <div
+        class="knr-ba-comparison__divider"
+        data-knr-ba-handle
+        role="slider"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="50"
+        aria-label="Compare before and after"
+        tabindex="0"
+      >
+        <span class="knr-ba-comparison__knob" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

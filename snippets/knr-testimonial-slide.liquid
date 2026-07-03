@@ -1,0 +1,34 @@
+{% comment %}
+  Testimonial slide for Before & After section.
+
+  Accepts:
+  - testimonial: {Metaobject} knr_testimonial
+{% endcomment %}
+{%- liquid
+  assign rating = testimonial.rating.value | default: 5 | plus: 0
+  assign full_stars = rating | floor
+  assign author = testimonial.author_name.value
+  assign quote = testimonial.quote.value
+-%}
+
+<div class="knr-ba-testimonial swiper-slide">
+  <div class="knr-ba-testimonial__meta">
+    <span class="knr-ba-testimonial__stars" aria-hidden="true">
+      {%- for i in (1..5) -%}
+        {%- if i <= full_stars -%}
+          <span class="knr-ba-testimonial__star knr-ba-testimonial__star--full">★</span>
+        {%- else -%}
+          <span class="knr-ba-testimonial__star knr-ba-testimonial__star--empty">★</span>
+        {%- endif -%}
+      {%- endfor -%}
+    </span>
+
+    {%- if author != blank -%}
+      <span class="knr-ba-testimonial__author">{{ author | escape }}</span>
+    {%- endif -%}
+  </div>
+
+  {%- if quote != blank -%}
+    <div class="knr-ba-testimonial__quote">{{ quote | escape | newline_to_br }}</div>
+  {%- endif -%}
+</div>
