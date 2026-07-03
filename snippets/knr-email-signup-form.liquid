@@ -1,0 +1,61 @@
+{% comment %}
+  Shopify customer newsletter form (native store email list).
+
+  Accepts:
+  - section: {Object}
+  - form_id_suffix: {String} Optional unique suffix for form field ids
+{% endcomment %}
+{%- assign form_id = 'knr-email-signup-form-' | append: section.id -%}
+{%- assign input_id = 'knr-email-signup-email-' | append: section.id -%}
+{%- if form_id_suffix != blank -%}
+  {%- assign form_id = form_id | append: '-' | append: form_id_suffix -%}
+  {%- assign input_id = input_id | append: '-' | append: form_id_suffix -%}
+{%- endif -%}
+
+{%- form 'customer', id: form_id, class: 'knr-email-signup__form' -%}
+  <input type="hidden" name="contact[tags]" value="newsletter">
+
+  <div class="knr-email-signup__fields">
+    <div class="knr-email-signup__field">
+      <label class="visually-hidden" for="{{ input_id }}">
+        {{ section.settings.email_placeholder | escape }}
+      </label>
+      <input
+        id="{{ input_id }}"
+        type="email"
+        name="contact[email]"
+        class="knr-email-signup__input"
+        value="{{ form.email }}"
+        autocomplete="email"
+        autocorrect="off"
+        autocapitalize="off"
+        aria-required="true"
+        placeholder="{{ section.settings.email_placeholder | escape }}"
+        required
+        {% if form.errors %}
+          aria-invalid="true"
+          aria-describedby="{{ form_id }}-error"
+        {% elsif form.posted_successfully? %}
+          aria-describedby="{{ form_id }}-success"
+        {% endif %}
+      >
+    </div>
+
+    <button type="submit" class="knr-email-signup__submit" name="commit">
+      {{ section.settings.submit_label | escape }}
+    </button>
+  </div>
+
+  {%- if form.errors -%}
+    <p class="knr-email-signup__message knr-email-signup__message--error" id="{{ form_id }}-error" role="alert">
+      {{ form.errors.translated_fields.email | capitalize }}
+      {{ form.errors.messages.email }}
+    </p>
+  {%- endif -%}
+
+  {%- if form.posted_successfully? -%}
+    <p class="knr-email-signup__message knr-email-signup__message--success" id="{{ form_id }}-success" role="status">
+      {{ section.settings.success_message | escape }}
+    </p>
+  {%- endif -%}
+{%- endform -%}
